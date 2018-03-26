@@ -2,8 +2,39 @@
 <div><span>id: </span>{{hero.id}}</div>
 <div><span>name: </span>{{hero.name}}</div>
 
-<div>
-  <label>name:
-    <input [(ngModel)]="hero.name" placeholder="name">
-  </label>
+<h2>Send Transaction</h2>
+<form [formGroup]="txForm">
+  <div class="form-group">
+    <label class="center-block">Your Wallet Address:
+      <input class="form-control" formControlName="from">
+      <span *ngIf="balance != nil && balance !=''">Balance: {{balance}}</span>
+    </label>
+    <label class="center-block">Private Key:
+      <input class="form-control" formControlName="privateKey">
+    </label>
+    <label class="center-block">To:
+      <input class="form-control" formControlName="to">
+    </label>
+    <label class="center-block">Amount:
+      <input class="form-control" formControlName="amount">
+    </label>
+  </div>
+  <button (click)="sendTx()">Send</button>
+</form>
+
+<div *ngIf="receipt != nil">
+<p>Transaction sent! Hash: {{ receipt.transactionHash }}</p>
+</div>
+
+<hr/>
+
+<button (click)="createAccount()">Create Account</button>
+
+<div *ngIf="account != nil">
+  <h2>Account</h2>
+  <p>
+    NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
+  </p>
+  Address: {{account.address}}<br/>
+  Private key: {{account.privateKey}}<br/>
 </div>

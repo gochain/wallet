@@ -1,37 +1,88 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/concatMap'
 import { fromPromise } from 'rxjs/observable/fromPromise';
 // import web3 from 'web3';
 // import w3 = require('web3');
-import w3 from 'web3';
+// import w3 from 'web3';
+import * as Web3 from 'web3';
 import { MessageService } from './message.service';
-
+ 
 @Injectable()
 export class WalletService {
 
-  // web3: Web3;
+  web3: Web3;
   account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
 
   constructor(private messageService: MessageService) {
-    console.log("WEB3:", w3);
-    // console.log("providers:", Web3.providers);
-    // this.web3 = new Web3(new Web3.providers.HttpProvider("http://138.68.1.11:8545"));
-    // this.account = this.web3.eth.accounts.create()
-    // console.log("ACCOUNT CREATED:", this.account)
+    console.log("WEB3:", Web3);
+    console.log("providers:", Web3.providers);
+    this.web3 = new Web3(new Web3.providers.HttpProvider("https://testnet-rpc.gochain.io"));
   }
 
-  getNonce(): Observable<Number> {
-    // let p = this.web3.eth.getTransactionCount(this.account.address);
-    // var source1 = fromPromise(p);
-    // source1.subscribe(nonce => {
-    //   console.log(nonce); 
-    //   // account1.nonce = response;
-    //   // Todo: send the message _after_ fetching the heroes
-    //   this.messageService.add('HeroService: fetched heroes');
-    //   // return of(HEROES);
+  createAccount(): any {
+    let account = this.web3.eth.accounts.create();
+    console.log("ACCOUNT CREATED:", this.account);
+    return account;
+  }
+
+  sendTx(from: string, privateKey: string, to: string, amount: number): any {
+    console.log("SENDTX");
+    let p = this.web3.eth.getTransactionCount(from);
+    let source1 = fromPromise(p);
+    let tx = null;
+    return source1.concatMap(nonce => {
+      console.log("GOT NONCE:", nonce);
+      this.messageService.add('Got nonce: ' + nonce);
+      // now send tx
+      try {
+        amount = this.web3.utils.toWei(amount, 'ether')
+      } catch(e) {
+        this.messageService.add('ERROR: ' + e);
+        return Observable.throw(e);
+      }
+      tx = {to: to, value: amount, nonce: nonce, gas: '2000000'}
+      p = this.web3.eth.accounts.signTransaction(tx, privateKey);
+      return fromPromise(p)
+    }).concatMap(signed => {
+      console.log("signed:", signed);
+      this.messageService.add('Transaction submitted, waiting for receipt...');
+      tx.signed = signed;
+      // this.web3.eth.sendSignedTransaction(tx.signed.rawTransaction).on('receipt', function(response){
+      //   console.log("receipt:", response);
+      //   this.messageService.add('Receipt: ' + response);
+      // }).then(function(response){ console.log("response not receipt:", response) }).catch(console.log)
+      return fromPromise(this.web3.eth.sendSignedTransaction(tx.signed.rawTransaction))
+    })
+    // .concatMap(receipt => {
+    //     console.log("receipt:", receipt);
+    //     this.messageService.add('Receipt: ' + receipt);
+    //     return receipt;
     // })
-    // return source1;
+  }
+
+  getBalance(address: string): Observable<string> {
+    let source1 = null;
+    try {
+      let p = this.web3.eth.getBalance(address);
+      source1 = fromPromise(p);
+      return source1.map(balance => {
+        console.log("converting balance:", balance);
+        balance = this.web3.utils.fromWei(balance, 'ether')
+        return balance;
+      })
+    } catch(e) {
+      this.messageService.add('ERROR: ' + e);
+      return Observable.throw(e);  
+    }
+  }
+  
+  isAddress(address: string): boolean {
+    return this.web3.utils.isAddress(address);
   }
 }
 
