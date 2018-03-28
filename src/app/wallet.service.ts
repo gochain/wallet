@@ -19,8 +19,8 @@ export class WalletService {
   account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
 
   constructor(private messageService: MessageService) {
-    console.log("WEB3:", Web3);
-    console.log("providers:", Web3.providers);
+    // console.log("WEB3:", Web3);
+    // console.log("providers:", Web3.providers);
     this.web3 = new Web3(new Web3.providers.HttpProvider("https://testnet-rpc.gochain.io"));
   }
 
@@ -52,17 +52,8 @@ export class WalletService {
       console.log("signed:", signed);
       this.messageService.add('Transaction submitted, waiting for receipt...');
       tx.signed = signed;
-      // this.web3.eth.sendSignedTransaction(tx.signed.rawTransaction).on('receipt', function(response){
-      //   console.log("receipt:", response);
-      //   this.messageService.add('Receipt: ' + response);
-      // }).then(function(response){ console.log("response not receipt:", response) }).catch(console.log)
       return fromPromise(this.web3.eth.sendSignedTransaction(tx.signed.rawTransaction))
     })
-    // .concatMap(receipt => {
-    //     console.log("receipt:", receipt);
-    //     this.messageService.add('Receipt: ' + receipt);
-    //     return receipt;
-    // })
   }
 
   getBalance(address: string): Observable<string> {

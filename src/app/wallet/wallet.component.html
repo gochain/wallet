@@ -1,34 +1,39 @@
-<h2>{{ hero.name  | uppercase }} Details</h2>
-<div><span>id: </span>{{hero.id}}</div>
-<div><span>name: </span>{{hero.name}}</div>
-
 <h2>Send Transaction</h2>
 <form [formGroup]="txForm">
-  <div class="form-group">
-    <label class="center-block">Your Wallet Address:
-      <input class="form-control" formControlName="from">
+  <div class="form-group" id="div-tx-form">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Your Wallet Address" formControlName="from">
       <span *ngIf="balance != nil && balance !=''">Balance: {{balance}}</span>
-    </label>
-    <label class="center-block">Private Key:
-      <input class="form-control" formControlName="privateKey">
-    </label>
-    <label class="center-block">To:
-      <input class="form-control" formControlName="to">
-    </label>
-    <label class="center-block">Amount:
-      <input class="form-control" formControlName="amount">
-    </label>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Private Key" formControlName="privateKey">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="To" formControlName="to">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Amount" formControlName="amount">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="sendTx()">Send</button>
   </div>
-  <button (click)="sendTx()">Send</button>
 </form>
 
-<div *ngIf="receipt != nil">
-<p>Transaction sent! Hash: {{ receipt.transactionHash }}</p>
-</div>
+<mat-card style="margin-top: 12px;">
+  <mat-card-content>
+    <div *ngIf="receipt != nil">
+      <span>Transaction submitted, waiting for confirmation...</span>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    <div *ngIf="receipt != nil">
+      <p>Transaction complete! Hash: {{ receipt.transactionHash }}</p>
+    </div>
+        
+  </mat-card-content>
+</mat-card>
 
 <hr/>
 
-<button (click)="createAccount()">Create Account</button>
+<button mat-raised-button color="primary"  (click)="createAccount()">Create Account</button>
 
 <div *ngIf="account != nil">
   <h2>Account</h2>

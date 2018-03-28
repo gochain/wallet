@@ -9,15 +9,12 @@ import { WalletService } from '../wallet.service';
   styleUrls: ['./wallet.component.css']
 })
 export class WalletComponent implements OnInit {
-  hero: Hero = {
-    id: 1,
-    name: 'Windstorm'
-  };
 
   nonce: Number;
   account: any;
   txForm: FormGroup;
   balance: string;
+  sending: true;
   receipt: Map<string,any>;
 
   constructor(private walletService: WalletService, private fb: FormBuilder) { 
@@ -45,19 +42,24 @@ export class WalletComponent implements OnInit {
   onChanges(): void {
     this.txForm.get('from').valueChanges.subscribe(val => {
       console.log("changed", val);
-      if (this.walletService.isAddress(val)){
-        this.walletService.getBalance(val).subscribe(balance => {
-          console.log("balance:", balance);
-          this.balance = balance;
-        },
-        err => {
-          console.error('ERROR:', err);
-        },
-        () => {
-          console.log(`We're done here!`);
-        })         
-      }
+      this.updateBalance();
     });
+  }
+
+  updateBalance(): void{
+    let val = this.txForm.get('from').value;
+    if (this.walletService.isAddress(val)){
+      this.walletService.getBalance(val).subscribe(balance => {
+        console.log("balance:", balance);
+        this.balance = balance;
+      },
+      err => {
+        console.error('ERROR:', err);
+      },
+      () => {
+        console.log(`We're done here!`);
+      })         
+    }
   }
 
   createAccount(): void {
@@ -65,6 +67,7 @@ export class WalletComponent implements OnInit {
   }
 
   sendTx(): void {
+    this.sending = true;
     this.walletService.sendTx(
       this.txForm.get('from').value,
       this.txForm.get('privateKey').value,
@@ -73,6 +76,7 @@ export class WalletComponent implements OnInit {
     ).subscribe(receipt => {
       console.log("component got receipt:", receipt);
       this.receipt = receipt;
+      this.updateBalance();
     })
   }
 }
