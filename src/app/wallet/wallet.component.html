@@ -1,45 +1,48 @@
-<h2>Send Transaction</h2>
-<form [formGroup]="txForm">
-  <div class="form-group" id="div-tx-form">
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Your Wallet Address" formControlName="from">
-      <span *ngIf="balance != nil && balance !=''">Balance: {{balance}}</span>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Private Key" formControlName="privateKey">
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="To" formControlName="to">
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Amount" formControlName="amount">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="sendTx()">Send</button>
+<mat-card class="full-card">
+  <mat-card-title>Send Transaction</mat-card-title>
+  <form [formGroup]="txForm">
+    <div class="form-group" id="div-tx-form">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Your Wallet Address" formControlName="from">
+        <span *ngIf="balance != nil && balance !=''">Balance: {{balance}}</span>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Private Key" formControlName="privateKey">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="To" formControlName="to">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Amount" formControlName="amount">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="sendTx()">Send</button>
+    </div>
+  </form>
+
+  <mat-card style="margin-top: 12px;">
+    <mat-card-content>
+      <div *ngIf="receipt != nil">
+        <span>Transaction submitted, waiting for confirmation...</span>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div *ngIf="receipt != nil">
+        <p>Transaction complete! Hash: {{ receipt.transactionHash }}</p>
+      </div>
+          
+    </mat-card-content>
+  </mat-card>
+
+  <hr/>
+
+  <button mat-raised-button color="primary"  (click)="createAccount()">Create Account</button>
+
+  <div *ngIf="account != nil">
+    <h2>Account</h2>
+    <p>
+      NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
+    </p>
+    Address: {{account.address}}<br/>
+    Private key: {{account.privateKey}}<br/>
   </div>
-</form>
 
-<mat-card style="margin-top: 12px;">
-  <mat-card-content>
-    <div *ngIf="receipt != nil">
-      <span>Transaction submitted, waiting for confirmation...</span>
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    </div>
-    <div *ngIf="receipt != nil">
-      <p>Transaction complete! Hash: {{ receipt.transactionHash }}</p>
-    </div>
-        
-  </mat-card-content>
 </mat-card>
-
-<hr/>
-
-<button mat-raised-button color="primary"  (click)="createAccount()">Create Account</button>
-
-<div *ngIf="account != nil">
-  <h2>Account</h2>
-  <p>
-    NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
-  </p>
-  Address: {{account.address}}<br/>
-  Private key: {{account.privateKey}}<br/>
-</div>

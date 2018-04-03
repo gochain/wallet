@@ -1,33 +1,48 @@
 /* Application-wide Styles */
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 h1 {
     color: red;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     font-size: 250%;
   }
   h2, h3 {
     color: #444;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     font-weight: lighter;
   }
   body {
-    margin: 2em;
+    margin: 0;
+    background-color: ghostwhite;
   }
   body, input[text], button {
     color: #888;
-    font-family: Cambria, Georgia;
+    font-family: 'Roboto', Cambria, Georgia;
   }
   /* everywhere else */
   * {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
   }
 
 #div-tx-form {
     min-width: 150px;
-    max-width: 500px;
+    /* max-width: 500px; */
     width: 100%;
 }
 .full-width {
     width: 100%;
+}
+
+.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+        Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}
+
+.full-card {
+    max-width: 600px;
+    min-width: 150px;
+    width: 100%;
+    margin: 0 auto;
 }

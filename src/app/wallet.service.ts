@@ -19,8 +19,6 @@ export class WalletService {
   account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
 
   constructor(private messageService: MessageService) {
-    // console.log("WEB3:", Web3);
-    // console.log("providers:", Web3.providers);
     this.web3 = new Web3(new Web3.providers.HttpProvider("https://testnet-rpc.gochain.io"));
   }
 
