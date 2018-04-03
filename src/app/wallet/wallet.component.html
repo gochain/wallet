@@ -31,10 +31,12 @@
           
     </mat-card-content>
   </mat-card>
+</mat-card>
 
-  <hr/>
 
-  <button mat-raised-button color="primary"  (click)="createAccount()">Create Account</button>
+<mat-card class="full-card" style="margin-top:20px;">
+  <mat-card-title>Create Account</mat-card-title>
+  <button mat-raised-button color="primary"  (click)="createAccount()">Create</button>
 
   <div *ngIf="account != nil">
     <h2>Account</h2>
