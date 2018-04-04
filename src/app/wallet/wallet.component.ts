@@ -12,11 +12,15 @@ import { MessageService } from '../message.service';
 export class WalletComponent implements OnInit {
 
   nonce: Number;
-  account: any;
   txForm: FormGroup;
   balance: string;
   sending: boolean = false;
   receipt: Map<string,any>;
+
+  // fields for creating an account
+  account: any;
+  // f2Address: string;
+  // f2PrivateKey: string;
 
   constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService) { 
     this.createForm();

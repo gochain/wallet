@@ -39,12 +39,15 @@
   <button mat-raised-button color="primary"  (click)="createAccount()">Create</button>
 
   <div *ngIf="account != null">
-    <h2>Account</h2>
     <p>
       NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
     </p>
-    Address: {{account.address}}<br/>
-    Private key: {{account.privateKey}}<br/>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Address" value="{{account.address}}">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Private Key" value="{{account.privateKey}}">
+    </mat-form-field>
   </div>
 
 </mat-card>
