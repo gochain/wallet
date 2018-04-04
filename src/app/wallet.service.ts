@@ -6,22 +6,30 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/concatMap'
 import { fromPromise } from 'rxjs/observable/fromPromise';
-// import web3 from 'web3';
-// import w3 = require('web3');
-// import w3 from 'web3';
 import * as Web3 from 'web3';
 import { MessageService } from './message.service';
- 
+
+declare let window: any;
+
 @Injectable()
 export class WalletService {
 
-  web3: Web3;
+  private web3: any;
   account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
 
   constructor(private messageService: MessageService) {
-    this.web3 = new Web3(new Web3.providers.HttpProvider("https://testnet-rpc.gochain.io"));
+    window.addEventListener('load', (event) => {
+      this.bootstrapWeb3();
+    });
   }
 
+  public bootstrapWeb3() {
+    // Thank you Quintor/angular-truffle-box
+    console.log("Web3:", Web3)
+    let p = new (<any>Web3).providers.HttpProvider("https://testnet-rpc.gochain.io");
+    this.web3 = new (<any>Web3)(p);
+  }
+ 
   createAccount(): any {
     let account = this.web3.eth.accounts.create();
     console.log("ACCOUNT CREATED:", this.account);
@@ -44,14 +52,25 @@ export class WalletService {
         return Observable.throw(e);
       }
       tx = {to: to, value: amount, nonce: nonce, gas: '2000000'}
-      p = this.web3.eth.accounts.signTransaction(tx, privateKey);
-      return fromPromise(p)
+      let p2 = this.web3.eth.accounts.signTransaction(tx, privateKey);
+      if (p2 instanceof Promise) {
+        return fromPromise(p2);
+      } else {
+        // this would be a Signature
+        return of(p2);
+        // return this.sendSignedTx(tx, signed);
+      }
     }).concatMap(signed => {
-      console.log("signed:", signed);
-      this.messageService.add('Transaction submitted, waiting for receipt...');
-      tx.signed = signed;
-      return fromPromise(this.web3.eth.sendSignedTransaction(tx.signed.rawTransaction))
+      return this.sendSignedTx(tx, signed);
     })
+  }
+
+  sendSignedTx(tx, signed): Observable<any> {
+    console.log("signed:", signed);
+    tx.signed = signed;
+    let p2 = fromPromise(this.web3.eth.sendSignedTransaction(tx.signed.rawTransaction))
+    this.messageService.add('Transaction submitted, waiting for receipt...');
+    return p2;
   }
 
   getBalance(address: string): Observable<string> {

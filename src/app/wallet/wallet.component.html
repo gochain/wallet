@@ -4,7 +4,7 @@
     <div class="form-group" id="div-tx-form">
       <mat-form-field class="full-width">
         <input matInput placeholder="Your Wallet Address" formControlName="from">
-        <span *ngIf="balance != nil && balance !=''">Balance: {{balance}}</span>
+        <span *ngIf="balance != null && balance !=''">Balance: {{balance}}</span>
       </mat-form-field>
       <mat-form-field class="full-width">
         <input matInput placeholder="Private Key" formControlName="privateKey">
@@ -21,11 +21,11 @@
 
   <mat-card style="margin-top: 12px;">
     <mat-card-content>
-      <div *ngIf="receipt != nil">
+      <div *ngIf="receipt != null">
         <span>Transaction submitted, waiting for confirmation...</span>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
-      <div *ngIf="receipt != nil">
+      <div *ngIf="receipt != null">
         <p>Transaction complete! Hash: {{ receipt.transactionHash }}</p>
       </div>
           
@@ -38,7 +38,7 @@
   <mat-card-title>Create Account</mat-card-title>
   <button mat-raised-button color="primary"  (click)="createAccount()">Create</button>
 
-  <div *ngIf="account != nil">
+  <div *ngIf="account != null">
     <h2>Account</h2>
     <p>
       NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
