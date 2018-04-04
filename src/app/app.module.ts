@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 // import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule} from '@angular/material';
+import {MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { WalletComponent } from './wallet/wallet.component';
@@ -23,7 +23,7 @@ import { MessageService } from './message.service';
     // FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule
+    MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule
   ],
   providers: [
     WalletService,

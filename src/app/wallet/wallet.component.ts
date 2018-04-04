@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Hero } from '../hero';
+import { MatSnackBar } from '@angular/material';
 import { WalletService } from '../wallet.service';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-wallet',
@@ -14,10 +15,10 @@ export class WalletComponent implements OnInit {
   account: any;
   txForm: FormGroup;
   balance: string;
-  sending: true;
+  sending: boolean = false;
   receipt: Map<string,any>;
 
-  constructor(private walletService: WalletService, private fb: FormBuilder) { 
+  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService) { 
     this.createForm();
   }
 
@@ -51,6 +52,7 @@ export class WalletComponent implements OnInit {
     if (this.walletService.isAddress(val)){
       this.walletService.getBalance(val).subscribe(balance => {
         console.log("balance:", balance);
+        this.messageService.add("Updated balance.");
         this.balance = balance;
       },
       err => {
@@ -67,6 +69,9 @@ export class WalletComponent implements OnInit {
   }
 
   sendTx(): void {
+    if (this.txForm.invalid) {
+      return
+    }
     this.sending = true;
     this.walletService.sendTx(
       this.txForm.get('from').value,
@@ -77,6 +82,13 @@ export class WalletComponent implements OnInit {
       console.log("component got receipt:", receipt);
       this.receipt = receipt;
       this.updateBalance();
+    },
+    err => {
+      console.error('ERROR:', err);
+      this.messageService.add("ERROR! " + err);
+    },
+    () => {
+      this.sending = false;
     })
   }
 }

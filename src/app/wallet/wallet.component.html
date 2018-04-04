@@ -4,8 +4,8 @@
     <div class="form-group" id="div-tx-form">
       <mat-form-field class="full-width">
         <input matInput placeholder="Your Wallet Address" formControlName="from">
-        <span *ngIf="balance != null && balance !=''">Balance: {{balance}}</span>
       </mat-form-field>
+      <div *ngIf="balance != null && balance !=''">Your current balance is: {{balance}}</div>
       <mat-form-field class="full-width">
         <input matInput placeholder="Private Key" formControlName="privateKey">
       </mat-form-field>
@@ -21,7 +21,7 @@
 
   <mat-card style="margin-top: 12px;">
     <mat-card-content>
-      <div *ngIf="receipt != null">
+      <div *ngIf="sending">
         <span>Transaction submitted, waiting for confirmation...</span>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
