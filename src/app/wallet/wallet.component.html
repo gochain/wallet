@@ -22,11 +22,14 @@
   <mat-card style="margin-top: 12px;">
     <mat-card-content>
       <div *ngIf="sending">
-        <span>Transaction submitted, waiting for confirmation...</span>
+        <span>Transaction submitted, waiting for receipt...</span>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
       <div *ngIf="receipt != null">
-        <p>Transaction complete! Hash: {{ receipt.transactionHash }}</p>
+        <p>
+          Transaction complete!<br/>
+          TxHash: <a href="https://testnet-explorer.gochain.io/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
+        </p>
       </div>
           
     </mat-card-content>
