@@ -15,7 +15,6 @@ declare let window: any;
 export class WalletService {
 
   public web3: any;
-  // account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
 
   constructor(private messageService: MessageService) {
     window.addEventListener('load', (event) => {
@@ -24,13 +23,10 @@ export class WalletService {
   }
 
   public bootstrapWeb3() {
-    // Thank you Quintor/angular-truffle-box
-    console.log("Web3:", Web3)
-    let rpcHost = "http://167.99.175.88"; // tmp
-    // let rpcHost = "https://testnet-rpc.gochain.io";
+    // console.log("Web3:", Web3)
+    let rpcHost = "https://testnet-rpc.gochain.io";
     let p = new (<any>Web3).providers.HttpProvider(rpcHost);
     this.web3 = new (<any>Web3)(p);
-    console.log("ACCOUNTS", this.web3.accounts);
   }
  
   createAccount(): any {
@@ -38,10 +34,6 @@ export class WalletService {
     console.log("ACCOUNT CREATED:", account);
     return account;
   }
-
-  // accountFromPrivateKey(privateKey:string): Map<string,any> {
-  //   return this.web3.eth.accounts.privateKeyToAccount(privateKey);
-  // }
 
   w3(): any {
     return this.web3;
