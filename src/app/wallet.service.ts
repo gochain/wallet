@@ -14,8 +14,8 @@ declare let window: any;
 @Injectable()
 export class WalletService {
 
-  private web3: any;
-  account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
+  public web3: any;
+  // account: Account; // Map<string, string> = new Map<string, string>(); // { [key:string]:string; }
 
   constructor(private messageService: MessageService) {
     window.addEventListener('load', (event) => {
@@ -26,19 +26,37 @@ export class WalletService {
   public bootstrapWeb3() {
     // Thank you Quintor/angular-truffle-box
     console.log("Web3:", Web3)
-    let p = new (<any>Web3).providers.HttpProvider("https://testnet-rpc.gochain.io");
+    let rpcHost = "http://167.99.175.88"; // tmp
+    // let rpcHost = "https://testnet-rpc.gochain.io";
+    let p = new (<any>Web3).providers.HttpProvider(rpcHost);
     this.web3 = new (<any>Web3)(p);
+    console.log("ACCOUNTS", this.web3.accounts);
   }
  
   createAccount(): any {
     let account = this.web3.eth.accounts.create();
-    console.log("ACCOUNT CREATED:", this.account);
+    console.log("ACCOUNT CREATED:", account);
     return account;
   }
 
-  sendTx(from: string, privateKey: string, to: string, amount: number): any {
+  // accountFromPrivateKey(privateKey:string): Map<string,any> {
+  //   return this.web3.eth.accounts.privateKeyToAccount(privateKey);
+  // }
+
+  w3(): any {
+    return this.web3;
+  }
+
+  sendTx(privateKey: string, to: string, amount: number): any {
     console.log("SENDTX");
-    let p = this.web3.eth.getTransactionCount(from);
+    let from = null;
+    try {
+      from = this.web3.eth.accounts.privateKeyToAccount(privateKey);
+    } catch(e) {
+      this.messageService.add('ERROR: ' + e);
+      return Observable.throw(e);
+    }
+    let p = this.web3.eth.getTransactionCount(from.address);
     let source1 = fromPromise(p);
     let tx = null;
     return source1.concatMap(nonce => {

@@ -3,12 +3,12 @@
   <form [formGroup]="txForm">
     <div class="form-group" id="div-tx-form">
       <mat-form-field class="full-width">
-        <input matInput placeholder="Your Wallet Address" formControlName="from">
-      </mat-form-field>
-      <div *ngIf="balance != null && balance !=''">Your current balance is: {{balance}}</div>
-      <mat-form-field class="full-width">
         <input matInput placeholder="Private Key" formControlName="privateKey">
       </mat-form-field>
+      <div *ngIf="balance != null && balance !=''">
+        Address for key: {{fromAccount.address}}<br/>
+        Your current balance is: {{balance}}
+      </div>
       <mat-form-field class="full-width">
         <input matInput placeholder="To" formControlName="to">
       </mat-form-field>
@@ -41,15 +41,15 @@
   <mat-card-title>Create Account</mat-card-title>
   <button mat-raised-button color="primary"  (click)="createAccount()">Create</button>
 
-  <div *ngIf="account != null">
+  <div *ngIf="newAccount != null">
     <p>
       NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
     </p>
     <mat-form-field class="full-width">
-      <input matInput placeholder="Address" value="{{account.address}}">
+      <input matInput placeholder="Address" value="{{newAccount.address}}">
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput placeholder="Private Key" value="{{account.privateKey}}">
+      <input matInput placeholder="Private Key" value="{{newAccount.privateKey}}">
     </mat-form-field>
   </div>
 

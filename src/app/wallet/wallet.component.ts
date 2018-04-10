@@ -11,16 +11,14 @@ import { MessageService } from '../message.service';
 })
 export class WalletComponent implements OnInit {
 
-  nonce: Number;
   txForm: FormGroup;
+  fromAccount: any;
   balance: string;
   sending: boolean = false;
   receipt: Map<string,any>;
 
   // fields for creating an account
-  account: any;
-  // f2Address: string;
-  // f2PrivateKey: string;
+  newAccount: any;
 
   constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService) { 
     this.createForm();
@@ -33,8 +31,8 @@ export class WalletComponent implements OnInit {
 
   createForm() {
     this.txForm = this.fb.group({
-      from: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ], // can use this updateOn thing on the entire formgroup too
-      privateKey: ['', Validators.required ],
+      // from: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ], // can use this updateOn thing on the entire formgroup too
+      privateKey: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ],
       to: ['', Validators.required ],
       amount: ['', [Validators.required, Validators.min(0.00000001)] ]
     });
@@ -45,22 +43,29 @@ export class WalletComponent implements OnInit {
   // }
 
   onChanges(): void {
-    this.txForm.get('from').valueChanges.subscribe(val => {
+    this.txForm.get('privateKey').valueChanges.subscribe(val => {
       console.log("changed", val);
       this.updateBalance();
     });
   }
 
   updateBalance(): void{
-    let val = this.txForm.get('from').value;
-    if (this.walletService.isAddress(val)){
-      this.walletService.getBalance(val).subscribe(balance => {
+    let val = this.txForm.get('privateKey').value;
+    try {
+      this.fromAccount = this.walletService.web3.eth.accounts.privateKeyToAccount(val);
+    } catch(e) {
+      this.messageService.add('ERROR: ' + e);
+      return
+    }
+    if (this.walletService.isAddress(this.fromAccount.address)){
+      this.walletService.getBalance(this.fromAccount.address).subscribe(balance => {
         console.log("balance:", balance);
         this.messageService.add("Updated balance.");
         this.balance = balance;
       },
       err => {
         console.error('ERROR:', err);
+        this.messageService.add('ERROR: ' + err);
       },
       () => {
         console.log(`We're done here!`);
@@ -69,7 +74,7 @@ export class WalletComponent implements OnInit {
   }
 
   createAccount(): void {
-    this.account = this.walletService.createAccount();
+    this.newAccount = this.walletService.createAccount();
   }
 
   sendTx(): void {
@@ -78,7 +83,6 @@ export class WalletComponent implements OnInit {
     }
     this.sending = true;
     this.walletService.sendTx(
-      this.txForm.get('from').value,
       this.txForm.get('privateKey').value,
       this.txForm.get('to').value,
       this.txForm.get('amount').value

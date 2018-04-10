@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-    <span>GoChain Wallet</span>
+    <span style="margin-right: 20px;">GoChain Wallet</span>
+
+    <button mat-button (click)="sendTx()">Send Tx</button>
+    <button mat-button (click)="sendTx()">Create Account</button>
 
     <!-- This fills the remaining space of the current row -->
     <span class="fill-remaining-space"></span>
@@ -8,6 +11,14 @@
 </mat-toolbar>
 
 <div style="margin:2em;">
+    <mat-card style="margin-bottom: 2em;">
+        <mat-card-title>Warning</mat-card-title>
+        <mat-card-content>
+            Please use this wallet in <a href="https://support.google.com/chrome/answer/95464?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">Chrome Incognito Mode</a> 
+            or <a href="https://support.mozilla.org/en-US/kb/private-browsing-use-firefox-without-history" target="_blank">Firefox Private Window</a>. This will disable 
+            any extensions that could read your private key.
+        </mat-card-content>
+    </mat-card>
     <app-wallet></app-wallet>
     <app-messages></app-messages>
 </div>
