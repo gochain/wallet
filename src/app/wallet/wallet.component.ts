@@ -82,6 +82,7 @@ export class WalletComponent implements OnInit {
       return
     }
     this.sending = true;
+    this.receipt = null;
     this.walletService.sendTx(
       this.txForm.get('privateKey').value,
       this.txForm.get('to').value,
