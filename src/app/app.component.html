@@ -1,8 +1,9 @@
 <mat-toolbar color="primary">
-    <span style="margin-right: 20px;">GoChain Wallet</span>
+    <span style="margin-right: 20px;"><a routerLink="" style="color: white; text-decoration: none;">GoChain Wallet</a></span>
 
-    <!-- <button mat-button (click)="sendTx()">Send Tx</button>
-    <button mat-button (click)="sendTx()">Create Account</button> -->
+    <button mat-button routerLink="/create-account">Create Account</button>
+    <button mat-button routerLink="/get-goc">Get GOC</button>
+    <button mat-button routerLink="/send-tx">Send Tx</button>
 
     <!-- This fills the remaining space of the current row -->
     <span class="fill-remaining-space"></span>
@@ -19,6 +20,6 @@
             any extensions that could read your private key.
         </mat-card-content>
     </mat-card>
-    <app-wallet></app-wallet>
+    <router-outlet></router-outlet>
     <app-messages></app-messages>
 </div>

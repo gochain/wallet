@@ -17,18 +17,11 @@ export class WalletService {
   public web3: any;
 
   constructor(private messageService: MessageService) {
-    window.addEventListener('load', (event) => {
-      this.bootstrapWeb3();
-    });
-  }
-
-  public bootstrapWeb3() {
-    // console.log("Web3:", Web3)
     let rpcHost = "https://testnet-rpc.gochain.io";
     let p = new (<any>Web3).providers.HttpProvider(rpcHost);
     this.web3 = new (<any>Web3)(p);
   }
- 
+
   createAccount(): any {
     let account = this.web3.eth.accounts.create();
     console.log("ACCOUNT CREATED:", account);

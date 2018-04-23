@@ -1,56 +1,45 @@
-<mat-card class="full-card">
-  <mat-card-title>Send Transaction</mat-card-title>
-  <form [formGroup]="txForm">
-    <div class="form-group" id="div-tx-form">
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Private Key" formControlName="privateKey">
-      </mat-form-field>
-      <div *ngIf="balance != null && balance !=''">
-        Address for key: {{fromAccount.address}}<br/>
-        Your current balance is: {{balance}}
+
+<mat-card class="" style="">
+  <mat-card-title>Getting Started</mat-card-title>
+
+  <div fxLayout="row" fxLayout.lt-md="column" style="width: 100%;"  fxLayoutGap="20px">
+    <div fxFlex="1 1 auto" class="one full-card full-height" >
+      <div class="">
+        <mat-card class="" style="">
+          <mat-card-title>1. Create Account</mat-card-title>
+        
+          <mat-card-content>
+             The first thing you need is an account, click Create Account at the top to get started.
+          </mat-card-content>
+        
+        </mat-card>
       </div>
-      <mat-form-field class="full-width">
-        <input matInput placeholder="To" formControlName="to">
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Amount" formControlName="amount">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="sendTx()">Send</button>
+    
     </div>
-  </form>
+    <div fxFlex="1 1 auto" class="two full-card full-height" fxGrow >
+        <mat-card class="" style="">
+          <mat-card-title>2. Get GOC</mat-card-title>
+        
+          <mat-card-content>
+              Now that you have an account, you need some GOC to spend. 
+              <a href="https://t.me/go_chain" target="_blank">Join our Telegram</a> and ask for some!
+              <br/><br/>
+              NOTE: You will only get some tokens for the testnet. Mainnet goes live in May.
+          </mat-card-content>
+        
+        </mat-card>
+    </div>
+    <div fxFlex="1 1 auto" class="three full-card full-height">
+        <mat-card class="" style="">
+          <mat-card-title>3. Send Tx</mat-card-title>
+        
+          <mat-card-content>
+            Now that you have some GOC, share it with your friends! Click Send Tx above to send GOC.
+          </mat-card-content>
+        
+        </mat-card>
+    </div>
 
-  <mat-card style="margin-top: 12px;">
-    <mat-card-content>
-      <div *ngIf="sending">
-        <span>Transaction submitted, waiting for receipt...</span>
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div>
-      <div *ngIf="receipt != null">
-        <p>
-          Transaction complete!<br/>
-          TxHash: <a href="https://testnet-explorer.gochain.io/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
-        </p>
-      </div>
-          
-    </mat-card-content>
-  </mat-card>
-</mat-card>
-
-
-<mat-card class="full-card" style="margin-top:20px;">
-  <mat-card-title>Create Account</mat-card-title>
-  <button mat-raised-button color="primary"  (click)="createAccount()">Create</button>
-
-  <div *ngIf="newAccount != null">
-    <p>
-      NOTE: Once you leave this page, you cannot recover the address or private key. Please copy this somewhere safe!
-    </p>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Address" value="{{newAccount.address}}">
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Private Key" value="{{newAccount.privateKey}}">
-    </mat-form-field>
   </div>
 
 </mat-card>
