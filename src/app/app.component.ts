@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {Globals} from './globals'
+import { WalletService } from './wallet.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'GoChain Wallet';
+  private network: string;
+
+  constructor(private globals: Globals, private walletService: WalletService) {
+    this.network = globals.network;
+  }
+
+  public changeNetwork() {
+    this.globals.network = this.network;
+    this.walletService.reset();
+    console.log("changed network to: ", this.network);
+  }
 }

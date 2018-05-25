@@ -43,7 +43,7 @@ export class SendTxComponent implements OnInit {
   updateBalance(): void{
     let val = this.txForm.get('privateKey').value;
     try {
-      this.fromAccount = this.walletService.web3.eth.accounts.privateKeyToAccount(val);
+      this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(val);
     } catch(e) {
       this.messageService.add('ERROR: ' + e);
       return
