@@ -9,7 +9,7 @@
     <span class="fill-remaining-space"></span>
 
     <mat-form-field style="font-size: 75%; max-width: 120px; margin-right: 20px;">
-        <mat-select [(value)]="network" (selectionChange)="changeNetwork($event)">
+        <mat-select [(value)]="network" (selectionChange)="changeNetwork()">
             <mat-option value="mainnet">MainNet</mat-option>
             <mat-option value="testnet">TestNet</mat-option>
         </mat-select>
