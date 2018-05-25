@@ -9,7 +9,7 @@ import { WalletService } from './wallet.service';
 })
 export class AppComponent {
   title = 'GoChain Wallet';
-  private network: string;
+  public network: string;
 
   constructor(private globals: Globals, private walletService: WalletService) {
     this.network = globals.network;
