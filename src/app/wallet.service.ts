@@ -1,11 +1,8 @@
+
+import {concatMap} from 'rxjs/operators'
+import {throwError as observableThrowError,  Observable ,  of ,  from as fromPromise } from 'rxjs';
+// import 'rxjs/add/operator/concatMap'
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/concatMap'
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import * as Web3 from 'web3';
 import { MessageService } from './message.service';
 
@@ -39,33 +36,36 @@ export class WalletService {
       from = this.web3.eth.accounts.privateKeyToAccount(privateKey);
     } catch(e) {
       this.messageService.add('ERROR: ' + e);
-      return Observable.throw(e);
+      return observableThrowError(e);
     }
     let p = this.web3.eth.getTransactionCount(from.address);
     let source1 = fromPromise(p);
     let tx = null;
-    return source1.concatMap(nonce => {
-      console.log("GOT NONCE:", nonce);
-      this.messageService.add('Got nonce: ' + nonce);
-      // now send tx
-      try {
-        amount = this.web3.utils.toWei(amount, 'ether')
-      } catch(e) {
-        this.messageService.add('ERROR: ' + e);
-        return Observable.throw(e);
-      }
-      tx = {to: to, value: amount, nonce: nonce, gas: '2000000'}
-      let p2 = this.web3.eth.accounts.signTransaction(tx, privateKey);
-      if (p2 instanceof Promise) {
-        return fromPromise(p2);
-      } else {
-        // this would be a Signature
-        return of(p2);
-        // return this.sendSignedTx(tx, signed);
-      }
-    }).concatMap(signed => {
-      return this.sendSignedTx(tx, signed);
-    })
+    return source1.pipe(
+      concatMap(nonce => {
+        console.log("GOT NONCE:", nonce);
+        this.messageService.add('Got nonce: ' + nonce);
+        // now send tx
+        try {
+          amount = this.web3.utils.toWei(amount, 'ether')
+        } catch(e) {
+          this.messageService.add('ERROR: ' + e);
+          return observableThrowError(e);
+        }
+        tx = {to: to, value: amount, nonce: nonce, gas: '2000000'}
+        let p2 = this.web3.eth.accounts.signTransaction(tx, privateKey);
+        if (p2 instanceof Promise) {
+          return fromPromise(p2);
+        } else {
+          // this would be a Signature
+          return of(p2);
+          // return this.sendSignedTx(tx, signed);
+        }
+      }),
+      concatMap(signed => {
+        return this.sendSignedTx(tx, signed);
+      })
+    )
   }
 
   sendSignedTx(tx, signed): Observable<any> {
@@ -88,7 +88,7 @@ export class WalletService {
       })
     } catch(e) {
       this.messageService.add('ERROR: ' + e);
-      return Observable.throw(e);  
+      return observableThrowError(e);  
     }
   }
   
