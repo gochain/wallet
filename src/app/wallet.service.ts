@@ -33,6 +33,10 @@ export class WalletService {
       console.log("Connecting to: ", this.globals.rpcHost());
       let p = new (<any>Web3).providers.HttpProvider(this.globals.rpcHost());
       this.web3 = new (<any>Web3)(p);
+      console.log(this.web3)
+      console.log("W3 stuff:", this.web3.eth.net);
+      this.web3.eth.net.getId().then(console.log);
+
     }
     return this.web3;
   }

@@ -28,7 +28,7 @@
       <div *ngIf="receipt != null">
         <p>
           Transaction complete!<br/>
-          TxHash: <a href="https://testnet-explorer.gochain.io/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
+          TxHash: <a href="{{explorerHost()}}/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
         </p>
       </div>
           

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {Globals} from '../globals'
 import { WalletService } from '../wallet.service';
 import { MessageService } from '../message.service';
 
@@ -16,7 +17,7 @@ export class SendTxComponent implements OnInit {
   sending: boolean = false;
   receipt: Map<string,any>;
 
-  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService) { 
+  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) { 
     this.createForm();
   }
 
@@ -86,6 +87,10 @@ export class SendTxComponent implements OnInit {
     () => {
       this.sending = false;
     })
+  }
+
+  public explorerHost() {
+    return this.globals.explorerHost();
   }
 
 }

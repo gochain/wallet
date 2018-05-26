@@ -10,4 +10,11 @@ export class Globals {
     }
     return "https://rpc.gochain.io";
   }
+
+  public explorerHost(): string {
+    if (this.network == "testnet") {
+      return "https://testnet-explorer.gochain.io";
+    }
+    return "https://explorer.gochain.io";
+  }
 }
