@@ -20,4 +20,8 @@ export class AppComponent {
     this.walletService.reset();
     console.log("changed network to: ", this.network);
   }
+
+  public explorerHost() {
+    return this.globals.explorerHost();
+  }
 }

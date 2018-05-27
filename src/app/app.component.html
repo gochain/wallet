@@ -1,32 +1,77 @@
 <mat-toolbar color="primary">
-    <span style="margin-right: 20px;"><a routerLink="" style="color: white; text-decoration: none;">GoChain Wallet</a></span>
-
-    <button mat-button routerLink="/create-account">Create Account</button>
-    <button mat-button routerLink="/get-go">Get GO</button>
-    <button mat-button routerLink="/send-tx">Send Tx</button>
-
-    <!-- This fills the remaining space of the current row -->
-    <span class="fill-remaining-space"></span>
-
-    <mat-form-field style="font-size: 75%; max-width: 120px; margin-right: 20px;">
-        <mat-select [(value)]="network" (selectionChange)="changeNetwork()">
-            <mat-option value="mainnet">MainNet</mat-option>
-            <mat-option value="testnet">TestNet</mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <span style="margin-right: 20px; font-size: 75%;"><a class="toolbar-link" href="https://gochain.io" target="_blank">Website</a></span>
+  <ul>
+    <li>
+      <a href="/" class="hamburger">
+        <svg viewBox="0 0 58 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g transform="translate(-28.000000, -40.000000)" fill="#98B8BA">
+              <g transform="translate(28.000000, 40.000000)">
+                <rect id="Rectangle-3" x="0" y="0" width="58" height="8" rx="4"></rect>
+                <rect id="Rectangle-3-Copy" x="0" y="17" width="58" height="8" rx="4"></rect>
+                <rect id="Rectangle-3-Copy-2" x="0" y="34" width="58" height="8" rx="4"></rect>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+    </li>
+    <li>
+      <a href="{{explorerHost()}}" class="sugar">
+        <svg width="58px" height="49px" viewBox="0 0 58 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g transform="translate(-28.000000, -139.000000)" fill="#9AD7DA" fill-rule="nonzero">
+              <g transform="translate(28.000000, 139.000000)">
+                <path d="M57.5410246,22.8029386 L43.940858,14.5626621 L43.940858,9.4079516 C43.940858,9.09334486 43.7717618,8.79083838 43.5060392,8.633535 L29.4589754,0.127052723 C29.1690962,-0.0423509075 28.8067472,-0.0423509075 28.516868,0.127052723 L14.4698042,8.633535 C14.2040816,8.80293863 14.0349854,9.09334486 14.0349854,9.4079516 L14.0349854,14.5626621 L0.434818825,22.8029386 C0.16909621,22.9723423 0,23.2627485 0,23.5773552 L0,38.593777 C0,38.8962835 0.144939608,39.1745895 0.398583923,39.3439931 L14.4456476,48.8426966 C14.7355269,49.0363008 15.1220325,49.048401 15.42399,48.8668971 L29,40.6508211 L42.57601,48.8668971 C42.7209496,48.951599 42.8779675,49 43.0470637,49 C43.2040816,49 43.3731778,48.951599 43.5181175,48.8668971 L57.5651812,40.3604149 C57.8309038,40.1910112 58,39.900605 58,39.5859983 L58,23.5773552 C57.9758434,23.2627485 57.8067472,22.960242 57.5410246,22.8029386 Z M14.0470637,46.386344 L1.81174511,38.1097666 L1.81174511,25.3439931 L14.0470637,32.5920484 L14.0470637,46.386344 Z M14.9650146,31.031115 L2.53644315,23.662057 L14.059142,16.6923077 L14.059142,24.4364736 C14.0470637,24.7268799 14.1920033,25.0051858 14.4456476,25.1745895 L19.3977509,28.5263613 L14.9650146,31.031115 Z M28.0941274,39.0656871 L15.8588088,46.4710458 L15.8588088,32.6041487 L21.088713,29.6637857 L28.0941274,34.394987 L28.0941274,39.0656871 Z M28.0941274,32.2169404 L15.8588088,23.9524633 L15.8588088,11.0172861 L28.0941274,18.4226448 L28.0941274,32.2169404 Z M28.9879217,16.8496111 L16.6922116,9.4079516 L28.9879217,1.96629213 L41.2836318,9.4079516 L28.9879217,16.8496111 Z M42.1291129,11.0172861 L42.1291129,24.9083838 L29.8937943,32.3137424 L29.8937943,18.4226448 L42.1291129,11.0172861 Z M42.1170346,46.4831461 L29.881716,39.0777874 L29.881716,34.4312878 L29.8937943,34.4312878 L37.0683049,30.0872947 L42.1170346,32.6404494 L42.1170346,46.4831461 Z M42.9987505,31.0432152 L38.9042066,28.9740709 L43.5060392,26.1910112 C43.7717618,26.0216076 43.940858,25.7312014 43.940858,25.4165946 L43.940858,16.6802074 L55.391087,23.613656 L42.9987505,31.0432152 Z M56.1761766,39.0777874 L43.940858,46.4831461 L43.940858,32.5920484 L56.1761766,25.2592913 L56.1761766,39.0777874 Z"></path>
+              </g>
+            </g>
+          </g>
+        </svg>
+        <span>Blocks</span>
+      </a>
+    </li>
+    <li><a routerLink="/" class="wallet">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+        <g>
+          <circle style="fill:#9AD7DA;" cx="18" cy="19.5" r="2"/>
+          <path style="fill:#9AD7DA;" d="M29.001,12.5C29,12.5,29,12.5,29.001,12.5L29,6.5V6V3.5c0-1.657-1.344-3-3-3h-4H5.5 C2.467,0.5,0,2.968,0,6v20c0,3.032,2.467,5.5,5.5,5.5h18c3.032,0,5.5-2.468,5.5-5.5v-1.5c0,0,0,0,0.001,0 C32.999,21.499,32.999,15.501,29.001,12.5z M5.5,2.5H22h4c0.551,0,1,0.448,1,1V6v0.5v3.184C26.686,9.572,26.352,9.5,26,9.5h-0.001 v-1v-2v-2c0-0.553-0.448-1-1-1h-21c-0.552,0-1,0.447-1,1v2v1.943C2.382,7.812,2,6.952,2,6C2,4.067,3.566,2.5,5.5,2.5z M24.999,5.5 h-21v-1h21V5.5z  M24.999,6.5v1h-21v-1H24.999z  M24.999,8.5v1H22H5.5C4.96,9.5,4.456,9.368,4,9.15V8.5H24.999z M27,26 c0,1.933-1.567,3.5-3.5,3.5h-18C3.566,29.5,2,27.933,2,26V10.239C2.951,11.026,4.171,11.5,5.5,11.5H22h4c0.551,0,1,0.448,1,1v2h-9 c-2.762,0-5,2.238-5,5s2.239,5,5,5h9V26z M28.277,22.5H18c-1.654,0-3-1.346-3-3s1.346-3,3-3h9 c0.617-0.008,1.229-0.307,1.602-0.804c0.104-0.14,0.185-0.297,0.25-0.461c0.009-0.022,0.025-0.039,0.033-0.062 C29.604,16.116,30,17.272,30,18.5C30,20.038,29.379,21.465,28.277,22.5z"/>
+        </g>
+      </svg>
+      <span>Wallet</span>
+    </a>
+      <ul>
+        <li><a routerLink="/create-account">Create Account</a></li>
+        <li><a routerLink="/get-go">Get GO</a></li>
+        <li><a routerLink="/send-tx">Send Tx</a></li>
+        <li><a class="toolbar-link" href="https://gochain.io" target="_blank">Website</a></li>
+      </ul>
+    </li>
+  </ul>
 </mat-toolbar>
 
-<div style="margin:2em;">
-    <mat-card style="margin-bottom: 2em;">
-        <mat-card-title>Warning</mat-card-title>
-        <mat-card-content>
-            Please use this wallet in <a href="https://support.google.com/chrome/answer/95464?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">Chrome Incognito Mode</a> 
-            or <a href="https://support.mozilla.org/en-US/kb/private-browsing-use-firefox-without-history" target="_blank">Firefox Private Window</a>. This will disable 
-            any extensions that could read your private key.
-        </mat-card-content>
-    </mat-card>
-    <router-outlet></router-outlet>
-    <app-messages></app-messages>
+<div class="content-wrapper">
+  <header class="page-header">
+    <div class="page-logo">
+      <a href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2093.51 386.41">
+          <path class="cls-1" d="M1029.24,137.23a98.72,98.72,0,0,1,39.7,38.3q14.22,24.66,14.23,56.74,0,32.47-14.23,57.34a98.36,98.36,0,0,1-39.7,38.5q-25.47,13.63-58.75,13.63-33.68,0-59.35-13.63a97.94,97.94,0,0,1-39.9-38.5Q857,264.76,857,232.27q0-32.09,14.23-56.74a98.3,98.3,0,0,1,39.9-38.3q25.67-13.62,59.35-13.63Q1003.77,123.6,1029.24,137.23ZM926.38,186.15q-16.85,18-16.84,46.92T926.38,280q16.85,18,44.11,18,26.47,0,43.31-18t16.84-46.92q0-28.87-16.84-46.92t-43.31-18Q943.22,168.11,926.38,186.15Z" transform="translate(-8.44 -8.78)"></path><path class="cls-1" d="M1298,117.13a93.67,93.67,0,0,0-87.27,2.75,88.81,88.81,0,0,0-33.49,33.69,96.89,96.89,0,0,0,0,94.17,90.09,90.09,0,0,0,33.49,33.88A91.42,91.42,0,0,0,1257.59,294a98.44,98.44,0,0,0,39.59-8.67,113.56,113.56,0,0,0,35.27-24L1363.57,296a162.77,162.77,0,0,1-50.43,34.87,142.1,142.1,0,0,1-58.31,12.81q-39.8,0-72.89-18.92a138.6,138.6,0,0,1-52-51.41Q1111,240.85,1111,201.44t19.31-71.71a138.7,138.7,0,0,1,52.59-50.82q33.3-18.52,73.88-18.52a149.3,149.3,0,0,1,57.92,11.82,142.32,142.32,0,0,1,48.46,32.7l-30.73,38.61A103.93,103.93,0,0,0,1298,117.13Z" transform="translate(-8.44 -8.78)"></path><path class="cls-1" d="M1567.27,148.84q20.88,21.87,20.88,59.3v131.6h-51.61V223.11q0-22.06-12.61-34.87t-34.28-12.8q-25.61.39-40.58,17.33t-15,43.34V339.74h-51.22V47.39h51.22V169.13q21.66-41.37,76-42.15Q1546.38,127,1567.27,148.84Z" transform="translate(-8.44 -8.78)"></path><path class="cls-1" d="M1746.54,339.74V314.13A69.13,69.13,0,0,1,1718.17,335q-17.34,7.1-39.79,7.09-22.07,0-38.81-8.47a62.12,62.12,0,0,1-25.81-23.44,63.43,63.43,0,0,1-9.06-33.49q0-29.55,20.88-46.3t59.1-17.14h61.47v-5.51q0-18.52-12.22-28.77t-35.46-10.24q-29.94,0-62.64,19.7L1617.31,153q24.82-13.78,45.11-19.9t47.48-6.1q41,0,63.63,19.7t23,55.16l.39,137.9Zm-18.12-47.48q15.75-10.44,17.73-25.81V247.54H1693q-20.51,0-30.14,6.11t-9.66,19.89q0,13.41,10,21.28t27.38,7.88Q1712.66,302.7,1728.42,292.26Z" transform="translate(-8.44 -8.78)"></path><path class="cls-1" d="M1819.43,129h51.22V339.74h-51.22Zm0-72h51.22V108h-51.22Z" transform="translate(-8.44 -8.78)"></path><path class="cls-1" d="M2079.07,148.84q20.88,21.87,20.88,59.3v131.6h-51.61V223.11q0-22.06-12.61-34.87t-34.28-12.8q-25.62.39-40.38,17.33t-14.78,43.34V339.74h-51.22V129h51.22v39.4Q1968,127.76,2021.94,127,2058.18,127,2079.07,148.84Z" transform="translate(-8.44 -8.78)"></path><polygon class="cls-2" points="407.03 286.95 347.52 385.91 407.03 385.91 466.52 286.95 407.03 187.99 347.52 187.99 407.03 286.95 407.03 286.95"></polygon><polygon class="cls-2" points="260.54 187.99 320.03 286.95 260.54 385.91 320.03 385.91 379.54 286.95 320.03 187.99 260.54 187.99 260.54 187.99"></polygon><polygon class="cls-2" points="553.51 286.95 494.02 187.99 434.52 187.99 494.02 286.95 434.52 385.91 494.02 385.91 553.51 286.95 553.51 286.95"></polygon><path class="cls-2" d="M249.57,383l52.49-87.29-52.49-87.3L229,174.14H392.39C378.88,80.92,298.71,9.28,201.71,9.28,95.25,9.28,8.94,95.56,8.94,202s86.31,192.7,192.77,192.7a192.12,192.12,0,0,0,43.93-5.12l3.93-6.54ZM210.49,236.19A19.14,19.14,0,0,1,184.55,228l-43.41-92.43a11.33,11.33,0,0,1,19.66-11.22l58,85.51a19.62,19.62,0,0,1-8.31,26.33Z" transform="translate(-8.44 -8.78)"></path><path class="cls-3" d="M736.06,204.81l98.71-.08V306q-20.88,16.54-48.85,26.4a166.45,166.45,0,0,1-55.56,9.85q-39.79,0-72.89-18.72a139.49,139.49,0,0,1-71.31-122.33q0-38.61,19.3-70.73a138.82,138.82,0,0,1,52.8-50.63q33.48-18.51,74.07-18.51a159.06,159.06,0,0,1,56.15,10.24,150.74,150.74,0,0,1,47.47,28l-21.67,27.58a120.12,120.12,0,0,0-38-23.83,118.71,118.71,0,0,0-43.93-8.47A107.64,107.64,0,0,0,678,109a105.33,105.33,0,0,0-39.2,38.61A106.79,106.79,0,0,0,639,255a107.87,107.87,0,0,0,39.4,39,106.55,106.55,0,0,0,54.38,14.38A115.73,115.73,0,0,0,768,302.64a131.18,131.18,0,0,0,33.29-16l.11-50.1-46.83-.17Z" transform="translate(-8.44 -8.78)"></path>
+        </svg>
+      </a>
+    </div>
+    <mat-form-field style="font-size: 75%; max-width: 120px; margin-right: 20px;">
+      <mat-select [(value)]="network" (selectionChange)="changeNetwork()">
+        <mat-option value="mainnet">MainNet</mat-option>
+        <mat-option value="testnet">TestNet</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </header>
+  <mat-card style="margin-bottom: 2em;">
+      <mat-card-title>Warning</mat-card-title>
+      <mat-card-content>
+          Please use this wallet in <a href="https://support.google.com/chrome/answer/95464?co=GENIE.Platform%3DDesktop&hl=en" target="_blank">Chrome Incognito Mode</a>
+          or <a href="https://support.mozilla.org/en-US/kb/private-browsing-use-firefox-without-history" target="_blank">Firefox Private Window</a>. This will disable
+          any extensions that could read your private key.
+      </mat-card-content>
+  </mat-card>
+  <router-outlet></router-outlet>
+  <app-messages></app-messages>
 </div>
