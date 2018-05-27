@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GetGocComponent } from './get-goc.component';
+import { GetGoComponent } from './get-go.component';
 
-describe('GetGocComponent', () => {
-  let component: GetGocComponent;
-  let fixture: ComponentFixture<GetGocComponent>;
+describe('GetGoComponent', () => {
+  let component: GetGoComponent;
+  let fixture: ComponentFixture<GetGoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GetGocComponent ]
+      declarations: [ GetGoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GetGocComponent);
+    fixture = TestBed.createComponent(GetGoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
