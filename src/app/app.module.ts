@@ -17,13 +17,13 @@ import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { GetGocComponent } from './get-goc/get-goc.component';
+import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 
 
 const appRoutes: Routes = [
   { path: 'create-account', component: CreateAccountComponent },
-  { path: 'get-goc', component: GetGocComponent },
+  { path: 'get-go', component: GetGoComponent },
   { path: 'send-tx', component: SendTxComponent },
   // { path: 'hero/:id',      component: HeroDetailComponent },
   // {
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
     MessagesComponent,
     CreateAccountComponent,
     PageNotFoundComponent,
-    GetGocComponent,
+    GetGoComponent,
     SendTxComponent
   ],
   imports: [
