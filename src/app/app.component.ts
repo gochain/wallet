@@ -12,9 +12,9 @@ export class AppComponent {
   title = 'GoChain Wallet';
   public network: string;
 
-  constructor(private globals: Globals, private walletService: WalletService, private _router: Router) {
+  constructor(private globals: Globals, private walletService: WalletService, private router: Router) {
     this.network = globals.network;
-    this.router = _router;
+    this.router = router;
   }
 
   public changeNetwork() {
