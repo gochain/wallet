@@ -15,7 +15,7 @@
         </svg>
       </a>
     </li>
-    <li>
+    <li [class.active]="router.url === explorerHost()">
       <a href="{{explorerHost()}}" class="sugar">
         <svg width="58px" height="49px" viewBox="0 0 58 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -29,7 +29,8 @@
         <span>Blocks</span>
       </a>
     </li>
-    <li><a routerLink="/" class="wallet">
+    <li [class.active]="router.url === '/'">
+      <a routerLink="/" class="wallet">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
         <g>
           <circle style="fill:#9AD7DA;" cx="18" cy="19.5" r="2"/>
@@ -39,9 +40,9 @@
       <span>Wallet</span>
     </a>
       <ul>
-        <li><a routerLink="/create-account">Create Account</a></li>
-        <li><a routerLink="/get-go">Get GO</a></li>
-        <li><a routerLink="/send-tx">Send Tx</a></li>
+        <li [class.active]="router.url === '/create-account'"><a routerLink="/create-account">Create Account</a></li>
+        <li [class.active]="router.url === '/get-go'"><a routerLink="/get-go">Get GO</a></li>
+        <li [class.active]="router.url === '/send-tx'"><a routerLink="/send-tx">Send Tx</a></li>
         <li><a class="toolbar-link" href="https://gochain.io" target="_blank">Website</a></li>
       </ul>
     </li>
