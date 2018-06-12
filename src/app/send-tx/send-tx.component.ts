@@ -17,7 +17,7 @@ export class SendTxComponent implements OnInit {
   sending: boolean = false;
   receipt: Map<string,any>;
 
-  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) { 
+  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) {
     this.createForm();
   }
 
@@ -61,7 +61,7 @@ export class SendTxComponent implements OnInit {
       },
       () => {
         console.log(`We're done here!`);
-      })         
+      })
     }
   }
 

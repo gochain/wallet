@@ -1,0 +1,30 @@
+h1 {
+    color: #369;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 250%;
+  }
+
+li.active > a {
+  font-weight: 700;
+  color: #49D9E6;
+}
+
+.page-logo.icon-logo {
+  display: none !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .page-logo {
+    display: none !important;
+
+    &.icon-logo {
+      display: flex !important;
+      height: 3rem !important;
+      width: 5rem !important;
+
+      svg {
+        height: 5rem !important;
+      }
+    }
+  }
+}
