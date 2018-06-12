@@ -12,8 +12,14 @@ h1 {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
     font-weight: lighter;
   }
+
+  html {
+    font-size: 62.5%;
+  }
+
   body {
     margin: 0;
+    font-size: 1.2rem;
     background-color: ghostwhite;
   }
   body, input[text], button {
@@ -25,6 +31,32 @@ h1 {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
   }
 
+  .content-wrapper {
+    margin: 2rem 2rem 2rem 5rem;
+    padding: 0 3rem;
+  }
+
+.page-logo {
+  display: block;
+  width: 25rem;
+}
+
+.page-logo svg .cls-1,
+.page-logo svg .cls-2,
+.page-logo svg .cls-3 {
+  fill:#fff;
+  stroke:#fff;
+  stroke-miterlimit:10;
+}
+
+.page-logo svg .cls-1{
+  stroke-width:4px;
+}
+.page-logo svg .cls-3{
+  stroke-width:18px;
+}
+
+
 #div-tx-form {
     min-width: 150px;
     /* max-width: 500px; */
@@ -35,7 +67,7 @@ h1 {
 }
 
 .fill-remaining-space {
-    /* This fills the remaining space, by using flexbox. 
+    /* This fills the remaining space, by using flexbox.
         Every toolbar row uses a flexbox row layout. */
     flex: 1 1 auto;
 }
@@ -54,8 +86,161 @@ h1 {
 .toolbar-link {
     color: white;
 }
-
+.mat-toolbar {
+  font: inherit;
+}
 .mat-toolbar .mat-button {
     font-size: 16px;
     /* font-weight: bold; */
+}
+
+.mat-toolbar.mat-primary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5rem;
+  height: 100vh;
+  background-color: #3E454A;
+  transition: width .2s ease-in-out;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+  overflow: hidden;
+}
+.mat-toolbar.mat-primary span {
+  visibility: hidden;
+  width: 0;
+  padding-left: 1rem;
+  font-size: 1.6rem;
+  font-weight: normal !important;
+}
+
+.mat-toolbar.mat-primary a {
+  color: #98B8BA;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-decoration: none;
+}
+
+.mat-toolbar.mat-primary a:hover {
+  color: #49D9E6;
+}
+
+
+.mat-toolbar.mat-primary:hover {
+  width: 15rem;
+}
+
+.mat-toolbar.mat-primary:hover span {
+  width: auto;
+  visibility: visible;
+}
+
+.mat-toolbar.mat-primary ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-header .mat-select-value {
+  color: #fff;
+}
+
+.mat-toolbar.mat-primary > ul > li {
+  margin-bottom: 2rem;
+}
+
+.mat-toolbar.mat-primary li li {
+  margin-left: 4rem;
+  margin-top: 1rem;
+}
+
+.mat-card {
+  background: inherit;
+  color: inherit;
+}
+
+a {
+  color: #36C6D3;
+}
+
+a:hover {
+  color: #49D9E6;
+}
+
+button.mat-primary {
+  background-color: #36C6D3 !important;
+}
+
+button.mat-primary:hover {
+  background-color: #49D9E6 !important;
+}
+
+.mat-input-element {
+  caret-color: inherit;
+}
+
+.mat-form-field-label {
+  color: #647982 !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: inherit;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: inherit;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: inherit;
+}
+
+.mat-input-element {
+  caret-color: inherit;
+}
+
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: inherit;
+}
+
+.mat-input-element::placeholder {
+  color: #fff !important;
+}
+
+.mat-input-element::-moz-placeholder {
+  color: #fff !important;
+}
+
+.mat-input-element::-webkit-input-placeholder {
+  color: #fff !important;
+}
+
+.mat-input-element:-ms-input-placeholder {
+  color: #fff !important;
+}
+
+
+
+.sugar svg, .hamburger svg, .wallet svg {
+  display: inline-block;
+  width: 3rem;
+  height: auto;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+body {
+  background-color: #2A2D2F;
+  color: #647982;
 }
