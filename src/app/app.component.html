@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <ul>
+  <ul class="navbar">
     <li>
       <a href="/" class="page-logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2093.51 386.41">
@@ -48,18 +48,18 @@
         <li><a class="toolbar-link" href="https://gochain.io" target="_blank">Website</a></li>
       </ul>
     </li>
+    <li>
+      <mat-form-field style="font-size: 75%; max-width: 120px; margin-right: 20px;">
+        <mat-select [(value)]="network" (selectionChange)="changeNetwork()">
+          <mat-option value="mainnet">MainNet</mat-option>
+          <mat-option value="testnet">TestNet</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </li>
   </ul>
 </mat-toolbar>
 
 <div class="content-wrapper">
-  <header class="page-header">
-    <mat-form-field style="font-size: 75%; max-width: 120px; margin-right: 20px;">
-      <mat-select [(value)]="network" (selectionChange)="changeNetwork()">
-        <mat-option value="mainnet">MainNet</mat-option>
-        <mat-option value="testnet">TestNet</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </header>
   <mat-card style="margin-bottom: 2em;">
       <mat-card-title>Warning</mat-card-title>
       <mat-card-content>
