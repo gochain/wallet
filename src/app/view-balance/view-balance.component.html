@@ -3,6 +3,9 @@
   <form [formGroup]="balForm">
     <div class="form-group" id="div-tx-form">
       <mat-form-field class="full-width">
+        <input matInput placeholder="Private Key" formControlName="privateKey">
+      </mat-form-field>
+      <mat-form-field class="full-width">
         <input matInput placeholder="Address" formControlName="address">
       </mat-form-field>
       <div *ngIf="balance">
