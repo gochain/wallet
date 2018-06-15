@@ -38,7 +38,15 @@ h1 {
 
 .page-logo {
   display: block;
-  width: 25rem;
+}
+
+.page-logo svg {
+  height: 3rem;
+}
+
+.page-logo.icon-logo svg g {
+  fill: #fff;
+  fill-rule: nonzero;
 }
 
 .page-logo svg .cls-1,
@@ -98,19 +106,19 @@ h1 {
   position: fixed;
   top: 0;
   left: 0;
-  width: 5rem;
-  height: 100vh;
+  width: 100vw;
+  height: 5rem;
   background-color: #3E454A;
-  transition: width .2s ease-in-out;
+  transition: height .2s ease-in-out;
   z-index: 2;
   display: flex;
   justify-content: flex-start;
+  align-content: center;
   padding: 1rem;
   overflow: hidden;
 }
+
 .mat-toolbar.mat-primary span {
-  visibility: hidden;
-  width: 0;
   padding-left: 1rem;
   font-size: 1.6rem;
   font-weight: normal !important;
@@ -130,7 +138,7 @@ h1 {
 
 
 .mat-toolbar.mat-primary:hover {
-  width: 15rem;
+  height: 15rem;
 }
 
 .mat-toolbar.mat-primary:hover span {
@@ -144,6 +152,15 @@ h1 {
   margin: 0;
 }
 
+.mat-toolbar.mat-primary > ul {
+  display: flex;
+  justify-content: flex-start;
+}
+.mat-toolbar.mat-primary > ul > li {
+  margin-right: 2rem;
+}
+
+
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -151,10 +168,6 @@ h1 {
 
 .page-header .mat-select-value {
   color: #fff;
-}
-
-.mat-toolbar.mat-primary > ul > li {
-  margin-bottom: 2rem;
 }
 
 .mat-toolbar.mat-primary li li {
@@ -231,8 +244,8 @@ button.mat-primary:hover {
 
 .sugar svg, .hamburger svg, .wallet svg {
   display: inline-block;
-  width: 3rem;
-  height: auto;
+  height: 3rem;
+  width: auto;
 }
 
 .mat-toolbar-row, .mat-toolbar-single-row {
