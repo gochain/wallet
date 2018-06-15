@@ -8,7 +8,7 @@ h1 {
 .navbar {
   width: 100vw;
 
-  li:last-child {
+  > li:last-child {
     margin-left: auto;
   }
 }
