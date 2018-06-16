@@ -44,40 +44,10 @@ export class ViewBalanceComponent implements OnInit {
 
   updateBalance(): void {
     let addr = this.balForm.get('address').value;
-    let key = this.balForm.get('privateKey').value;
-
-    if (key.indexOf('0x') !== 0 && key.length > 2) {
-      key = '0x' + key;
-      this.balForm.get('privateKey').setValue(key);
-    }
 
     if (addr.indexOf('0x') !== 0) {
       addr = '0x' + addr;
       this.balForm.get('address').setValue(addr);
-    }
-
-    if (key.length === 66) {
-      try {
-        this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(key);
-      } catch (e) {
-        this.messageService.add('ERROR: ' + e);
-        return;
-      }
-
-      if (this.walletService.isAddress(this.fromAccount.address)) {
-        this.walletService.getBalance(this.fromAccount.address).subscribe(balance => {
-            console.log('balance:', balance);
-            this.messageService.add('Updated balance.');
-            this.balance = balance;
-          },
-          err => {
-            console.error('ERROR:', err);
-            this.messageService.add('ERROR: ' + err);
-          },
-          () => {
-            console.log(`We're done here!`);
-          });
-      }
     }
 
     if (addr.length === 42) {
