@@ -13,6 +13,7 @@ export class ViewBalanceComponent implements OnInit {
   fromAccount: any;
   balForm: FormGroup;
   balance: string;
+  address: string;
 
   constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) {
     this.createForm();
@@ -49,6 +50,9 @@ export class ViewBalanceComponent implements OnInit {
       addr = '0x' + addr;
       this.balForm.get('address').setValue(addr);
     }
+
+    this.address = addr;
+
 
     if (addr.length === 42) {
       if (this.walletService.isAddress(addr)) {
