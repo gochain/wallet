@@ -13,15 +13,11 @@ export class Globals {
   }
 
   public explorerHost(): string {
-    if (this.network == "testnet") {
-      return "https://testnet-explorer.gochain.io";
-    }
-    return "https://explorer.gochain.io";
-  }
-
-  public explorerUrl(): string {
     if (environment.production) {
-      return 'https://explorer.gochain.io';
+      if (this.network == "testnet") {
+        return "https://testnet-explorer.gochain.io";
+      }
+      return "https://explorer.gochain.io";
     }
 
     return 'http://localhost:8000';
