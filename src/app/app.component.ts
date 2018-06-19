@@ -26,4 +26,8 @@ export class AppComponent {
   public explorerHost() {
     return this.globals.explorerHost();
   }
+
+  public explorerUrl() {
+    return this.globals.explorerUrl();
+  }
 }

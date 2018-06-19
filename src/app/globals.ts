@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class Globals {
@@ -16,5 +17,13 @@ export class Globals {
       return "https://testnet-explorer.gochain.io";
     }
     return "https://explorer.gochain.io";
+  }
+
+  public explorerUrl(): string {
+    if (environment.production) {
+      return 'https://explorer.gochain.io';
+    }
+
+    return 'http://localhost:8000';
   }
 }
