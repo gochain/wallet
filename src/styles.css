@@ -136,11 +136,6 @@ h1 {
   color: #49D9E6;
 }
 
-
-.mat-toolbar.mat-primary:hover {
-  height: 15rem;
-}
-
 .mat-toolbar.mat-primary:hover span {
   width: auto;
   visibility: visible;
@@ -239,8 +234,6 @@ button.mat-primary:hover {
 .mat-input-element:-ms-input-placeholder {
   color: #fff !important;
 }
-
-
 
 .sugar svg, .hamburger svg, .wallet svg {
   display: inline-block;
