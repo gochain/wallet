@@ -7,7 +7,7 @@
       </mat-form-field>
       <div *ngIf="balance">
         <p>Your current balance is: {{balance}}.</p>
-        <p><a href="https://explorer.gochain.io/addr/{{address}}">View in explorer</a></p>
+        <p><a href="{{explorerHost()}}/addr/{{address}}">View in explorer</a></p>
       </div>
     </div>
   </form>

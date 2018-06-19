@@ -71,4 +71,8 @@ export class ViewBalanceComponent implements OnInit {
       }
     }
   }
+
+  public explorerHost() {
+    return this.globals.explorerHost();
+  }
 }
