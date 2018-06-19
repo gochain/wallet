@@ -16,12 +16,14 @@ import { WalletService } from './wallet.service';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
 import { CreateAccountComponent } from './create-account/create-account.component';
+import { ViewBalanceComponent } from './view-balance/view-balance.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 
 
 const appRoutes: Routes = [
+  { path: 'view-balance', component: ViewBalanceComponent },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'get-go', component: GetGoComponent },
   { path: 'send-tx', component: SendTxComponent },
@@ -48,7 +50,8 @@ const appRoutes: Routes = [
     CreateAccountComponent,
     PageNotFoundComponent,
     GetGoComponent,
-    SendTxComponent
+    SendTxComponent,
+    ViewBalanceComponent
   ],
   imports: [
     BrowserModule,

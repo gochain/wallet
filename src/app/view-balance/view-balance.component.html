@@ -1,0 +1,14 @@
+<mat-card class="full-card">
+  <mat-card-title>View Balance</mat-card-title>
+  <form [formGroup]="balForm">
+    <div class="form-group" id="div-tx-form">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Address" formControlName="address">
+      </mat-form-field>
+      <div *ngIf="balance">
+        <p>Your current balance is: {{balance}}.</p>
+        <p><a href="{{explorerHost()}}/addr/{{address}}">View in explorer</a></p>
+      </div>
+    </div>
+  </form>
+</mat-card>
