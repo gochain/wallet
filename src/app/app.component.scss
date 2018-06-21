@@ -28,6 +28,12 @@ li.active > a {
   display: none !important;
 }
 
+footer {
+  text-align: center;
+  margin-top: 5rem;
+}
+
+
 @media only screen and (max-width: 600px) {
   .page-logo {
     display: none !important;
