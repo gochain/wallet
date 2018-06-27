@@ -44,30 +44,34 @@ export class SendTxComponent implements OnInit {
   updateBalance(): void{
     let val = this.txForm.get('privateKey').value;
 
-    if (val.indexOf('0x') !== 0) {
-      val = '0x' + val;
-      this.txForm.get('privateKey').setValue(val);
+    if (val.length === 64) {
+      if (val.indexOf('0x') !== 0) {
+        val = '0x' + val;
+        this.txForm.get('privateKey').setValue(val);
+      }
     }
 
-    try {
-      this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(val);
-    } catch(e) {
-      this.messageService.add('ERROR: ' + e);
-      return
-    }
-    if (this.walletService.isAddress(this.fromAccount.address)){
-      this.walletService.getBalance(this.fromAccount.address).subscribe(balance => {
-        console.log("balance:", balance);
-        this.messageService.add("Updated balance.");
-        this.balance = balance;
-      },
-      err => {
-        console.error('ERROR:', err);
-        this.messageService.add('ERROR: ' + err);
-      },
-      () => {
-        console.log(`We're done here!`);
-      })
+    if (val.length === 66) {
+      try {
+        this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(val);
+      } catch(e) {
+        this.messageService.add('ERROR: ' + e);
+        return
+      }
+      if (this.walletService.isAddress(this.fromAccount.address)){
+        this.walletService.getBalance(this.fromAccount.address).subscribe(balance => {
+          console.log("balance:", balance);
+          this.messageService.add("Updated balance.");
+          this.balance = balance;
+        },
+        err => {
+          console.error('ERROR:', err);
+          this.messageService.add('ERROR: ' + err);
+        },
+        () => {
+          console.log(`We're done here!`);
+        })
+      }
     }
   }
 
@@ -75,11 +79,17 @@ export class SendTxComponent implements OnInit {
     if (this.txForm.invalid) {
       return
     }
-    this.sending = true;
     this.receipt = null;
+    let to = this.txForm.get('to').value;
+    if (!this.walletService.isAddress(to)){
+      console.error('ERROR: Invalid TO address.');
+      this.messageService.add('ERROR: Invalid TO address.');
+      return;
+    }
+    this.sending = true;
     this.walletService.sendTx(
       this.txForm.get('privateKey').value,
-      this.txForm.get('to').value,
+      to,
       this.txForm.get('amount').value
     ).subscribe(receipt => {
       console.log("component got receipt:", receipt);

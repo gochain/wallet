@@ -1,13 +1,13 @@
 h1 {
     color: #369;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 250%;
+    // font-family: Arial, Helvetica, sans-serif;
+    // font-size: 100%;
   }
 
 
 .content-wrapper {
-  height: 100vh;
-  margin-top: 5rem;
+  // height: 100vh;
+  // margin-top: 5rem;
 }
 
 .navbar {
@@ -30,7 +30,7 @@ li.active > a {
 
 footer {
   text-align: center;
-  margin-top: 5rem;
+  margin-top: 30px;
 }
 
 
@@ -40,11 +40,11 @@ footer {
 
     &.icon-logo {
       display: flex !important;
-      height: 3rem !important;
-      width: 5rem !important;
+      // height: 3rem !important;
+      // width: 5rem !important;
 
       svg {
-        height: 5rem !important;
+        // height: 5rem !important;
       }
     }
   }
@@ -53,5 +53,20 @@ footer {
     span {
       display: none;
     }
+  }
+}
+
+/* this is here to hide things that should only show when small */
+.show-small {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .hide-small {
+    display: none;
+  }
+
+  .show-small {
+    display: block;
   }
 }

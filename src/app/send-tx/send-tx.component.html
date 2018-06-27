@@ -7,7 +7,7 @@
       </mat-form-field>
       <div *ngIf="balance != null && balance !=''">
         Address for key: {{fromAccount.address}}<br/>
-        Your current balance is: {{balance}}
+        Your current balance is: <span style="font-weight: bold; color: greenyellow;">{{balance | number}}</span>
       </div>
       <mat-form-field class="full-width">
         <input matInput placeholder="To" formControlName="to">

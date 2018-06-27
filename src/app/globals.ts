@@ -19,7 +19,6 @@ export class Globals {
       }
       return "https://explorer.gochain.io";
     }
-
     return 'http://localhost:8000';
   }
 }
