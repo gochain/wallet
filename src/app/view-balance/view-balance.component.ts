@@ -27,7 +27,6 @@ export class ViewBalanceComponent implements OnInit {
     this.balForm = this.fb.group({
       // from: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ], // can use this updateOn thing on the entire formgroup too
       address: ['', {validators: Validators.required /*, updateOn: 'blur'*/}],
-      privateKey: ['', {validators: Validators.required /*, updateOn: 'blur'*/}]
     });
   }
 
@@ -37,22 +36,19 @@ export class ViewBalanceComponent implements OnInit {
       this.updateBalance();
     });
 
-    this.balForm.get('privateKey').valueChanges.subscribe(val => {
-      console.log('changed', val);
-      this.updateBalance();
-    });
   }
 
   updateBalance(): void {
     let addr = this.balForm.get('address').value;
 
-    if (addr.indexOf('0x') !== 0) {
-      addr = '0x' + addr;
-      this.balForm.get('address').setValue(addr);
+    if (addr.length === 40) {
+      if (addr.indexOf('0x') !== 0) {
+        addr = '0x' + addr;
+        this.balForm.get('address').setValue(addr);
+      }
     }
 
     this.address = addr;
-
 
     if (addr.length === 42) {
       if (this.walletService.isAddress(addr)) {
