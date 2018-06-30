@@ -2,7 +2,7 @@
 .PHONY: dep run build docker release install test deploy
 
 run:
-	ng serve
+	ng serve --host 0.0.0.0
 
 build:
 	ng build --prod --aot
