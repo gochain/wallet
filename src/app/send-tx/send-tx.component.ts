@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {Globals} from '../globals';
 import { WalletService } from '../wallet.service';
 import { MessageService } from '../message.service';
+import { DriveService } from '../drive.service';
 
 @Component({
   selector: 'app-send-tx',
@@ -16,13 +17,30 @@ export class SendTxComponent implements OnInit {
   balance: string;
   sending: boolean = false;
   receipt: Map<string,any>;
+  // list of stored addresses
+  addresses: string[];
 
-  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) {
+  constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, public globals: Globals, public drive: DriveService) {
     this.createForm();
   }
 
   ngOnInit() {
     this.onChanges();
+    this.updateStoredAddresses();
+  }
+
+  updateStoredAddresses(): void {
+    if(this.globals.gAccessToken() != null) {
+      this.drive.listFiles("name contains 'gokey-'").subscribe(data => {
+        console.log(data);
+        let addrs = [];
+        for (var i = 0; i < data.files.length; i++) {
+          let f = data.files[i];
+          addrs.push(f.name.substring(6));
+        }
+        this.addresses = addrs;
+      })
+    }
   }
 
   createForm() {

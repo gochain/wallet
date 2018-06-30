@@ -2,6 +2,13 @@
   <mat-card-title>Send Transaction</mat-card-title>
   <form [formGroup]="txForm">
     <div class="form-group" id="div-tx-form">
+        <div *ngIf="addresses">
+          Stored Accounts:
+          <select class="form-control" id="address">
+            <option>Select an account:</option>
+            <option *ngFor="let addr of addresses" [value]="addr">{{addr}}</option>
+          </select>
+        </div>
       <mat-form-field class="full-width">
         <input matInput placeholder="Private Key" formControlName="privateKey">
       </mat-form-field>

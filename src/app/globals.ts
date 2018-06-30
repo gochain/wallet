@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Injectable()
 export class Globals {
   network: string = 'mainnet';
-  googleAccessToken: string;
+  // googleAccessToken: string;
+
+
+  constructor(public afAuth: AngularFireAuth ) { }
 
   public rpcHost(): string {
     if (this.network == "testnet") {
@@ -24,6 +28,6 @@ export class Globals {
   }
 
   public gAccessToken(): string {
-    return this.googleAccessToken;
+    return sessionStorage.getItem("gAccessToken"); // set in auth component
   }
 }

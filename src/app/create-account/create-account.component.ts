@@ -19,7 +19,8 @@ export class CreateAccountComponent implements OnInit {
 
   createAccount(): void {
     this.newAccount = this.walletService.createAccount();
-    this.drive.upload().subscribe((data) => console.log(data));
+    let contents = {address: this.newAccount.address, privateKey: this.newAccount.privateKey};
+    this.drive.uploadJSON("gokey-" + this.newAccount.address, contents).subscribe((data) => console.log(data));
   }
 
 }

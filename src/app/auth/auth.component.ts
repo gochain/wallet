@@ -20,10 +20,11 @@ export class AuthComponent implements OnInit {
     // provider.addScope('email');
     provider.addScope('https://www.googleapis.com/auth/drive.appdata');
     provider.addScope('https://www.googleapis.com/auth/drive.file');
-    this.afAuth.auth.signInWithPopup(provider).then(function(result) {
+    this.afAuth.auth.signInWithPopup(provider).then(data => {
       // This gives you a Google Access Token.
-      this.globals.googleAccessToken = result.credential['accessToken'];
-      console.log("access token:", this.googleAccessToken);
+      let at = data.credential['accessToken'];
+      console.log("access token:", at);
+      sessionStorage.setItem("gAccessToken", at);
       // The signed-in user info.
       // var user = result.user; 
      });
@@ -34,6 +35,17 @@ export class AuthComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.afAuth.user.subscribe(user => {
+    //   console.log("auth component init", user);
+    //   if(user != null){
+    //     console.log("get access token")
+    //     user.getIdToken().then(data => {
+    //       console.log("idtoken:", data);
+    //     })
+    //     .catch(err => {
+    //       console.log("ERROR!", err);
+    //     });
+    //   }
+    // })
   }
-
 }

@@ -91,7 +91,6 @@ const appRoutes: Routes = [
     Globals,
     WalletService,
     MessageService
-    // AngularFireAuth
   ],
   bootstrap: [AppComponent]
 })
