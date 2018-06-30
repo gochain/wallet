@@ -34,7 +34,6 @@
       <a mat-button routerLink="/send-tx">Send GO</a>
     </mat-toolbar-row>
 
-
 </mat-toolbar>
 
 <div class="content-wrapper">
@@ -47,6 +46,9 @@
       </mat-card-content>
   </mat-card>
   <router-outlet></router-outlet>
+  <div>
+    <app-auth></app-auth>
+  </div>
   <app-messages></app-messages>
   <footer>
     <a href="{{explorerHost()}}" class="sugar">

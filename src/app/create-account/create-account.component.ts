@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { WalletService } from '../wallet.service';
-import { MessageService } from '../message.service';
+import { DriveService } from '../drive.service';
 
 @Component({
   selector: 'app-create-account',
@@ -11,13 +12,14 @@ export class CreateAccountComponent implements OnInit {
 
   newAccount: any;
 
-  constructor(private walletService: WalletService) { }
+  constructor(private walletService: WalletService, public drive: DriveService) { }
 
   ngOnInit() {
   }
 
   createAccount(): void {
     this.newAccount = this.walletService.createAccount();
+    this.drive.upload().subscribe((data) => console.log(data));
   }
 
 }

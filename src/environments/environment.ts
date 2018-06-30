@@ -4,5 +4,13 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyA09X4-XEuSdo_b_ZgRnujY2Bl8dYMoKkA",
+    authDomain: "gochain-wallet.firebaseapp.com",
+    databaseURL: "https://gochain-wallet.firebaseio.com",
+    projectId: "gochain-wallet",
+    storageBucket: "gochain-wallet.appspot.com",
+    messagingSenderId: "264455571012"
+  }
 };

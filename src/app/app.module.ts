@@ -7,8 +7,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
         MatSelectModule} from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { Globals } from './globals';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { WalletComponent } from './wallet/wallet.component';
@@ -21,6 +26,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 import { ChartsModule } from 'ng2-charts';
+import { AuthComponent } from './auth/auth.component';
+
 
 const appRoutes: Routes = [
   { path: 'view-balance', component: ViewBalanceComponent },
@@ -51,7 +58,8 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     GetGoComponent,
     SendTxComponent,
-    ViewBalanceComponent
+    ViewBalanceComponent,
+    AuthComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -59,18 +67,31 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     ),
     BrowserModule,
+    HttpClientModule,
     // FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatToolbarModule,
+    MatSnackBarModule,
     MatSelectModule,
-    ChartsModule
+    ChartsModule,
+    MatSelectModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
   ],
   providers: [
     Globals,
     WalletService,
     MessageService
+    // AngularFireAuth
   ],
   bootstrap: [AppComponent]
 })

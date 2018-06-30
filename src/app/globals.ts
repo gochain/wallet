@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 @Injectable()
 export class Globals {
   network: string = 'mainnet';
+  googleAccessToken: string;
 
   public rpcHost(): string {
     if (this.network == "testnet") {
@@ -20,5 +21,9 @@ export class Globals {
       return "https://explorer.gochain.io";
     }
     return 'http://localhost:8000';
+  }
+
+  public gAccessToken(): string {
+    return this.googleAccessToken;
   }
 }

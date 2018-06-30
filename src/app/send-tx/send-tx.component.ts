@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {Globals} from '../globals'
+import {Globals} from '../globals';
 import { WalletService } from '../wallet.service';
 import { MessageService } from '../message.service';
 
