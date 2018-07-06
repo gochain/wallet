@@ -24,8 +24,30 @@ li.active > a {
   color: #49D9E6;
 }
 
-.page-logo.icon-logo {
+.icon-logo {
   display: none !important;
+}
+
+.page-logo {
+  width: 13rem;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.page-logo svg .cls-1,
+.page-logo svg .cls-2,
+.page-logo svg .cls-3 {
+  fill:#fff;
+  stroke:#fff;
+  stroke-miterlimit:10;
+}
+.page-logo svg .cls-1{
+  stroke-width:4px;
+}
+.page-logo svg .cls-3{
+  stroke-width:18px;
 }
 
 footer {
@@ -37,16 +59,10 @@ footer {
 @media only screen and (max-width: 600px) {
   .page-logo {
     display: none !important;
+  }
 
-    &.icon-logo {
-      display: flex !important;
-      // height: 3rem !important;
-      // width: 5rem !important;
-
-      svg {
-        // height: 5rem !important;
-      }
-    }
+  &.icon-logo {
+    display: flex !important;
   }
 
   .navbar > li {
