@@ -20,7 +20,9 @@ export class AuthComponent implements OnInit {
     // provider.addScope('email');
     provider.addScope('https://www.googleapis.com/auth/drive.appdata');
     provider.addScope('https://www.googleapis.com/auth/drive.file');
-    this.afAuth.auth.signInWithPopup(provider).then(data => {
+    let a = this.afAuth.auth;
+    a.setPersistence(auth.Auth.Persistence.SESSION); // this returns a promise... so could do something? https://firebase.google.com/docs/reference/js/firebase.auth.Auth#setPersistence
+    a.signInWithPopup(provider).then(data => {
       // This gives you a Google Access Token.
       let at = data.credential['accessToken'];
       console.log("access token:", at);
