@@ -54,14 +54,14 @@ const appRoutes: Routes = [
     ViewBalanceComponent
   ],
   imports: [
-    BrowserModule,
-    // FormsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
     ),
+    BrowserModule,
+    // FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
     MatSelectModule
