@@ -16,6 +16,7 @@ export class ViewBalanceComponent implements OnInit {
   address: string;
 
   // Doughnut
+  public displayChart:boolean = false;
   public doughnutChartLabels:string[] = ['GO', 'SOL', 'ETP'];
   public doughnutChartData:number[] = [0, 10, 25];
   public doughnutChartType:string = 'doughnut';

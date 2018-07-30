@@ -11,7 +11,7 @@
       </div>
     </div>
   </form>
-  <div style="display: block" *ngIf="balance > 0">
+  <div style="display: block" *ngIf="displayChart">
     <canvas baseChart
             [data]="doughnutChartData"
             [labels]="doughnutChartLabels"
