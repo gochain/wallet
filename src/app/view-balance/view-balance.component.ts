@@ -15,6 +15,34 @@ export class ViewBalanceComponent implements OnInit {
   balance: string;
   address: string;
 
+  // Doughnut
+  public displayChart:boolean = false;
+  public doughnutChartLabels:string[] = ['GO', 'SOL', 'ETP'];
+  public doughnutChartData:number[] = [0, 10, 25];
+  public doughnutChartType:string = 'doughnut';
+  public doughnutChartColors: any[] = [{
+    backgroundColor: [
+      '#00525a',
+      '#1fa6b2',
+      '#36c6d3'
+    ]
+  }];
+
+  public doughnutChartOptions:object = {
+    segmentShowStroke: false,
+    legend: {
+      labels: {
+        fontColor: '#ffffff',
+        defaultFontSize: '16'
+      }
+    },
+    elements: {
+      arc: {
+        borderWidth: 2
+      }
+    }
+  };
+
   constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) {
     this.createForm();
   }
@@ -56,6 +84,7 @@ export class ViewBalanceComponent implements OnInit {
             console.log('balance:', balance);
             this.messageService.add('Updated balance.');
             this.balance = balance;
+            this.doughnutChartData[0] = parseFloat(balance);
           },
           err => {
             console.error('ERROR:', err);
@@ -70,5 +99,14 @@ export class ViewBalanceComponent implements OnInit {
 
   public explorerHost() {
     return this.globals.explorerHost();
+  }
+
+  // events
+  public chartClicked(e:any):void {
+    console.log(e);
+  }
+
+  public chartHovered(e:any):void {
+    console.log(e);
   }
 }

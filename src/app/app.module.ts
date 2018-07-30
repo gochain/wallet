@@ -20,7 +20,7 @@ import { ViewBalanceComponent } from './view-balance/view-balance.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
-
+import { ChartsModule } from 'ng2-charts';
 
 const appRoutes: Routes = [
   { path: 'view-balance', component: ViewBalanceComponent },
@@ -64,7 +64,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-    MatSelectModule
+    MatSelectModule,
+    ChartsModule
   ],
   providers: [
     Globals,
