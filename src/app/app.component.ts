@@ -18,7 +18,7 @@ export class AppComponent {
   }
 
   public changeNetwork() {
-    this.globals.network = this.network;
+    this.globals.setNetwork(this.network);
     this.walletService.reset();
     console.log("changed network to: ", this.network);
   }

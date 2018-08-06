@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-        MatSelectModule} from '@angular/material';
+        MatSelectModule, MatExpansionModule} from '@angular/material';
 
 import { Globals } from './globals';
 
@@ -69,7 +69,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-    MatSelectModule,
+    MatSelectModule, MatExpansionModule,
     ChartsModule
   ],
   providers: [

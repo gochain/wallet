@@ -41,7 +41,7 @@ export class WalletService {
     return this.web3;
   }
 
-  sendTx(privateKey: string, to: string, amount: number): any {
+  sendTx(privateKey: string, tx: any): any {
     console.log("SENDTX");
     let from = null;
     try {
@@ -52,19 +52,12 @@ export class WalletService {
     }
     let p = this.w3().eth.getTransactionCount(from.address);
     let source1 = fromPromise(p);
-    let tx = null;
     return source1.pipe(
       concatMap(nonce => {
         console.log("GOT NONCE:", nonce);
         this.messageService.add('Got nonce: ' + nonce);
-        // now send tx
-        try {
-          amount = this.w3().utils.toWei(amount, 'ether')
-        } catch(e) {
-          this.messageService.add('ERROR: ' + e);
-          return observableThrowError(e);
-        }
-        tx = {to: to, value: amount, nonce: nonce, gas: '2000000'}
+        tx['nonce'] = nonce;
+        
         let p2 = this.w3().eth.accounts.signTransaction(tx, privateKey);
         if (p2 instanceof Promise) {
           return fromPromise(p2);
