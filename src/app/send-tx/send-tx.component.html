@@ -12,7 +12,7 @@
       <mat-form-field class="full-width">
         <input matInput placeholder="Amount" formControlName="amount">
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="sendTx()">Send</button>
+      <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending">Send</button>
     </div>
   </form>
 
