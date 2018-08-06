@@ -21,12 +21,15 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 import { ChartsModule } from 'ng2-charts';
+import { DeployComponent } from './deploy/deploy.component';
+import { BalanceComponent } from './balance/balance.component';
 
 const appRoutes: Routes = [
   { path: 'view-balance', component: ViewBalanceComponent },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'get-go', component: GetGoComponent },
   { path: 'send-tx', component: SendTxComponent },
+  { path: 'deploy', component: DeployComponent },
   // { path: 'hero/:id',      component: HeroDetailComponent },
   // {
   //   path: 'heroes',
@@ -51,7 +54,9 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
     GetGoComponent,
     SendTxComponent,
-    ViewBalanceComponent
+    ViewBalanceComponent,
+    DeployComponent,
+    BalanceComponent
   ],
   imports: [
     RouterModule.forRoot(

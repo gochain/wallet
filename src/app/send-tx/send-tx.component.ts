@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {Globals} from '../globals'
 import { WalletService } from '../wallet.service';
@@ -13,9 +13,11 @@ export class SendTxComponent implements OnInit {
 
   txForm: FormGroup;
   fromAccount: any;
-  balance: string;
+  // balance: string;
   sending: boolean = false;
   receipt: Map<string,any>;
+
+  @ViewChild('balance') balance;
 
   constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) {
     this.createForm();
@@ -34,9 +36,11 @@ export class SendTxComponent implements OnInit {
     });
   }
 
+
   onChanges(): void {
     this.txForm.get('privateKey').valueChanges.subscribe(val => {
       console.log("changed", val);
+      this.balance.reset();
       this.updateBalance();
     });
   }
@@ -50,28 +54,8 @@ export class SendTxComponent implements OnInit {
         this.txForm.get('privateKey').setValue(val);
       }
     }
-
-    if (val.length === 66) {
-      try {
-        this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(val);
-      } catch(e) {
-        this.messageService.add('ERROR: ' + e);
-        return
-      }
-      if (this.walletService.isAddress(this.fromAccount.address)){
-        this.walletService.getBalance(this.fromAccount.address).subscribe(balance => {
-          console.log("balance:", balance);
-          this.messageService.add("Updated balance.");
-          this.balance = balance;
-        },
-        err => {
-          console.error('ERROR:', err);
-          this.messageService.add('ERROR: ' + err);
-        },
-        () => {
-          console.log(`We're done here!`);
-        })
-      }
+    if (val.length === 66){
+      this.balance.update(this.txForm.get('privateKey').value);
     }
   }
 
@@ -87,14 +71,15 @@ export class SendTxComponent implements OnInit {
       return;
     }
     this.sending = true;
+    let pk = this.txForm.get('privateKey').value;
     this.walletService.sendTx(
-      this.txForm.get('privateKey').value,
+      pk,
       to,
       this.txForm.get('amount').value
     ).subscribe(receipt => {
       console.log("component got receipt:", receipt);
       this.receipt = receipt;
-      this.updateBalance();
+      this.balance.update(pk);
     },
     err => {
       console.error('ERROR:', err);
