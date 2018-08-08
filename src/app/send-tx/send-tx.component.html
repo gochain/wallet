@@ -3,11 +3,11 @@
   <!-- Might want to try this as a stepper: https://material.angular.io/components/stepper/overview -->
 
   <mat-card class="full-card">
-    <mat-card-title>Send Transaction</mat-card-title>
+    <!-- <mat-card-title>Send Transaction or Deploy a Contract</mat-card-title> -->
       <div class="form-group" id="div-tx-form" style="margin-bottom: 20px;">
         <mat-form-field class="full-width">
-          <input matInput placeholder="Private Key" formControlName="privateKey">
-          <mat-hint align="start">Enter your private key so you can perform operations.</mat-hint>
+          <input matInput placeholder="Private Key or Address" formControlName="privateKey">
+          <mat-hint align="start">Enter your private key to perform operations or address to see balance.</mat-hint>
         </mat-form-field>
         <div style="margin-top: 14px;">
           <app-balance #balance ></app-balance>

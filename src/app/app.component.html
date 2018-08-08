@@ -12,8 +12,8 @@
     </a>
     <div class="hide-small" style="margin-left: 40px;">
       <a mat-button routerLink="/create-account" [class.active]="router.url === '/create-account'">Create Account</a>
-      <a mat-button routerLink="/view-balance" [class.active]="router.url === '/view-balance'">View Balance</a>
-      <a mat-button routerLink="/send-tx">Send GO</a>
+      <a mat-button routerLink="/send-tx" [class.active]="router.url === '/send-tx'">Open Wallet</a>
+      <a mat-button routerLink="/contracts" [class.active]="router.url === '/view-balance'">Contracts</a>
     </div>
 
     <!-- This fills the remaining space of the current row -->

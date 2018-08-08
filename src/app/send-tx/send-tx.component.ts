@@ -103,15 +103,21 @@ export class SendTxComponent implements OnInit {
         this.txForm.get('privateKey').setValue(pk);
       }
     }
+    let addr = null;
     if (pk.length === 66){
       try {
         this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(pk);
+        addr = this.fromAccount.address;
       } catch(e) {
         this.messageService.add('ERROR: ' + e);
         return;
       }
-      this.balance.update(this.txForm.get('privateKey').value);
     }
+    if (pk.length == 42) {
+      // maybe it's an address
+      addr = pk;
+    }
+    this.balance.update(addr);
   }
 
   sendTx(): void {
