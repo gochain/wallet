@@ -6,7 +6,8 @@
     <!-- <mat-card-title>Send Transaction or Deploy a Contract</mat-card-title> -->
       <div class="form-group" id="div-tx-form" style="margin-bottom: 20px;">
         <mat-form-field class="full-width">
-          <input matInput placeholder="Private Key or Address" formControlName="privateKey">
+          <input (focus)="showPK = true" (focusout)="showPK = false" [attr.type]="showPK ? 'text' : 'password'" matInput placeholder="Private Key or Address" formControlName="privateKey">
+          <mat-icon matSuffix (click)="togglePKView()">{{ eyeIcon }}</mat-icon>
           <mat-hint align="start">Enter your private key to perform operations or address to see balance.</mat-hint>
         </mat-form-field>
         <div style="margin-top: 14px;">
@@ -51,6 +52,45 @@
             <mat-form-field class="full-width">
               <input matInput placeholder="Gas Limit" formControlName="gasLimit">
             </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="setStep('contract')">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Use Contract
+            </mat-panel-title>
+            <mat-panel-description>
+              <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}} -->
+              Interact with a Smart Contract on GoChain
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Contract Address" formControlName="contractAddress">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <textarea matInput placeholder="ABI / JSON Interface" formControlName="contractABI" rows="10" width="100%"></textarea>
+            </mat-form-field>
+            <div *ngIf="contract != null">
+              <mat-form-field >
+                <mat-select matInput placeholder="Choose Contract Function" formControlName="contractFunction">
+                  <mat-option *ngFor="let func of funcsToSelect()" [value]="func.name">
+                    {{func.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="func != null">
+                <mat-form-field *ngFor="let input of func.inputs">
+                  <input matInput placeholder="input.name" formControlName="input.name">
+                </mat-form-field>
+              </div>
+            </div>
+            <div *ngIf="functionResult != null">
+              <h3>Response</h3>
+              <div *ngFor="let k of functionResult">
+                  {{k[0]}}: <span style="font-weight: bold;">{{k[1]}}</span>
+              </div>
+            </div>
           </div>
         </mat-expansion-panel>
       </mat-accordion>

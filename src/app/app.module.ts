@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-        MatSelectModule, MatExpansionModule} from '@angular/material';
+        MatSelectModule, MatExpansionModule, MatIconModule } from '@angular/material';
 
 import { Globals } from './globals';
 
@@ -21,15 +21,15 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 import { ChartsModule } from 'ng2-charts';
-import { DeployComponent } from './deploy/deploy.component';
 import { BalanceComponent } from './balance/balance.component';
+import { ContractsComponent } from './contracts/contracts.component';
 
 const appRoutes: Routes = [
   { path: 'view-balance', component: ViewBalanceComponent },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'get-go', component: GetGoComponent },
   { path: 'send-tx', component: SendTxComponent },
-  { path: 'deploy', component: DeployComponent },
+  { path: 'contracts', component: ContractsComponent },
   // { path: 'hero/:id',      component: HeroDetailComponent },
   // {
   //   path: 'heroes',
@@ -55,8 +55,8 @@ const appRoutes: Routes = [
     GetGoComponent,
     SendTxComponent,
     ViewBalanceComponent,
-    DeployComponent,
-    BalanceComponent
+    BalanceComponent,
+    ContractsComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -69,7 +69,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-    MatSelectModule, MatExpansionModule,
+    MatSelectModule, MatExpansionModule, MatIconModule,
     ChartsModule
   ],
   providers: [

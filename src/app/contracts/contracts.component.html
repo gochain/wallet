@@ -1,0 +1,89 @@
+<form [formGroup]="contractForm">
+  
+    <mat-card class="full-card">
+      <!-- <mat-card-title>Send Transaction or Deploy a Contract</mat-card-title> -->
+        <div class="form-group" id="div-tx-form" style="margin-bottom: 20px;">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Private Key or Address" formControlName="privateKey">
+            <mat-hint align="start">Enter your private key to perform operations or address to see balance.</mat-hint>
+          </mat-form-field>
+          <div style="margin-top: 14px;">
+            <app-balance #balance ></app-balance>
+          </div>
+        </div>
+    
+  
+      <div *ngIf="fromAccount != null">
+        <mat-accordion >
+          <mat-expansion-panel [expanded]="step === 'send'" (opened)="setStep('send')">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Send GO
+              </mat-panel-title>
+              <mat-panel-description>
+                Perform a regular transaction, send GO to another account
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+    
+              <mat-form-field class="full-width">
+                <input matInput placeholder="To" formControlName="to">
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Amount" formControlName="amount">
+              </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel (opened)="setStep('deploy')">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Deploy Contract
+              </mat-panel-title>
+              <mat-panel-description>
+                <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}} -->
+                Deploy a Smart Contract to GoChain
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div>
+              <mat-form-field class="full-width">
+                <textarea matInput placeholder="Bytecode" formControlName="byteCode" rows="3" width="100%"></textarea>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Gas Limit" formControlName="gasLimit">
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        
+        <div style="margin-top: 20px;">
+          <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending" style="margin: 0 auto;">Send</button>
+        </div>
+        
+      </div>
+  
+      <mat-card *ngIf="sending || receipt != null" style="margin-top: 12px;">
+          <mat-card-content>
+            <div *ngIf="sending">
+              <span>Transaction submitted, waiting for receipt...</span>
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+            <div *ngIf="receipt != null">
+                Transaction complete!<br/>
+                TxHash: <a href="{{explorerHost()}}/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
+                <div *ngIf="receipt.contractAddress !== null">
+                    <b>Contract Address: {{ receipt.contractAddress }}</b>
+                </div>
+             
+            </div>
+                
+          </mat-card-content>
+        </mat-card>
+    
+    </mat-card>
+  
+    
+  </form>
+  
+  
+  <div>
+    VALID? 
+    {{ txForm.valid }}
+  </div>
