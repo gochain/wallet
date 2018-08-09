@@ -22,14 +22,12 @@ import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 import { ChartsModule } from 'ng2-charts';
 import { BalanceComponent } from './balance/balance.component';
-import { ContractsComponent } from './contracts/contracts.component';
 
 const appRoutes: Routes = [
   { path: 'view-balance', component: ViewBalanceComponent },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'get-go', component: GetGoComponent },
   { path: 'send-tx', component: SendTxComponent },
-  { path: 'contracts', component: ContractsComponent },
   // { path: 'hero/:id',      component: HeroDetailComponent },
   // {
   //   path: 'heroes',
@@ -55,8 +53,7 @@ const appRoutes: Routes = [
     GetGoComponent,
     SendTxComponent,
     ViewBalanceComponent,
-    BalanceComponent,
-    ContractsComponent
+    BalanceComponent
   ],
   imports: [
     RouterModule.forRoot(
