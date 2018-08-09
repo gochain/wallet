@@ -48,6 +48,7 @@
           <div>
             <mat-form-field class="full-width">
               <textarea matInput placeholder="Bytecode" formControlName="byteCode" rows="3" width="100%"></textarea>
+              <mat-hint align="start">Must start with 0x!</mat-hint>
             </mat-form-field>
             <mat-form-field class="full-width">
               <input matInput placeholder="Gas Limit" formControlName="gasLimit">
@@ -65,6 +66,7 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
+            <h2>NOTICE: This feature is still in development, only read-only "calls" are currently supported.</h2>
             <mat-form-field class="full-width">
               <input matInput placeholder="Contract Address" formControlName="contractAddress">
             </mat-form-field>
@@ -124,8 +126,9 @@
   
 </form>
 
-
+<!-- 
 <div>
   VALID? 
   {{ txForm.valid }}
-</div>
+</div> 
+-->

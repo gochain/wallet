@@ -37,13 +37,12 @@ export class SendTxComponent implements OnInit {
 
   createForm() {
     this.txForm = this.fb.group({
-      // from: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ], // can use this updateOn thing on the entire formgroup too
       privateKey: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ],
       to: ['', []],
       amount: ['', [] ],
       byteCode: [''],
       gasLimit: ['300000', []],
-      contractAddress: ['', []], // '0x5890624F8A95E808F6ba4258217e2709Ab56dA4C', []],
+      contractAddress: ['', []],
       contractABI: ['', []],
       contractFunction: ['']
     });

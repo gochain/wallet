@@ -13,7 +13,6 @@
     <div class="hide-small" style="margin-left: 40px;">
       <a mat-button routerLink="/create-account" [class.active]="router.url === '/create-account'">Create Account</a>
       <a mat-button routerLink="/send-tx" [class.active]="router.url === '/send-tx'">Open Wallet</a>
-      <a mat-button routerLink="/contracts" [class.active]="router.url === '/contracts'">Use a Contract</a>
     </div>
 
     <!-- This fills the remaining space of the current row -->
@@ -49,14 +48,12 @@
   <router-outlet></router-outlet>
   <app-messages></app-messages>
   <footer>
-    <a href="https://t.me/go_chain" target="_blank" class="sugar">Need Help?</a>
+    <a href="https://github.com/gochain-io/wallet/issues" target="_blank" class="sugar">Got Issues?</a>
     - 
-    <a href="{{explorerHost()}}" target="_blank" class="sugar">
-      <span>Block Explorer</span>
-    </a>
+    <a href="{{explorerHost()}}" target="_blank" class="sugar">Block Explorer</a>
     - 
-    <a href="https://gochain.io" target="_blank" class="sugar">
-      <span>GoChain.io</span>
-    </a>
+    <a href="https://gochain.io" target="_blank" class="sugar">GoChain.io</a>
+    -
+    <a href="https://t.me/go_chain" target="_blank" class="sugar">Telegram Group</a>
   </footer>
 </div>
