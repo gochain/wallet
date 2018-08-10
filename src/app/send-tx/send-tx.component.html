@@ -1,34 +1,134 @@
-<mat-card class="full-card">
-  <mat-card-title>Send Transaction</mat-card-title>
-  <form [formGroup]="txForm">
-    <div class="form-group" id="div-tx-form">
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Private Key" formControlName="privateKey">
-      </mat-form-field>
-      <app-balance #balance></app-balance>
-      <mat-form-field class="full-width">
-        <input matInput placeholder="To" formControlName="to">
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Amount" formControlName="amount">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending">Send</button>
-    </div>
-  </form>
+<form [formGroup]="txForm">
 
-  <mat-card style="margin-top: 12px;">
-    <mat-card-content>
-      <div *ngIf="sending">
-        <span>Transaction submitted, waiting for receipt...</span>
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <!-- Might want to try this as a stepper: https://material.angular.io/components/stepper/overview -->
+
+  <mat-card class="full-card">
+    <!-- <mat-card-title>Send Transaction or Deploy a Contract</mat-card-title> -->
+      <div class="form-group" id="div-tx-form" style="margin-bottom: 20px;">
+        <mat-form-field class="full-width">
+          <input (focus)="showPK = true" (focusout)="showPK = false" [attr.type]="showPK ? 'text' : 'password'" matInput placeholder="Private Key or Address" formControlName="privateKey">
+          <mat-icon matSuffix (click)="togglePKView()">{{ eyeIcon }}</mat-icon>
+          <mat-hint align="start">Enter your private key to perform operations or address to see balance.</mat-hint>
+        </mat-form-field>
+        <div style="margin-top: 14px;">
+          <app-balance #balance ></app-balance>
+        </div>
       </div>
-      <div *ngIf="receipt != null">
-        <p>
-          Transaction complete!<br/>
-          TxHash: <a href="{{explorerHost()}}/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
-        </p>
+  
+
+    <div *ngIf="fromAccount != null">
+      <mat-accordion >
+        <mat-expansion-panel [expanded]="step === 'send'" (opened)="setStep('send')">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Send GO
+            </mat-panel-title>
+            <mat-panel-description>
+              Perform a regular transaction, send GO to another account
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+  
+            <mat-form-field class="full-width">
+              <input matInput placeholder="To" formControlName="to">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Amount" formControlName="amount">
+            </mat-form-field>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="setStep('deploy')">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Deploy Contract
+            </mat-panel-title>
+            <mat-panel-description>
+              <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}} -->
+              Deploy a Smart Contract to GoChain
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <mat-form-field class="full-width">
+              <textarea matInput placeholder="Bytecode" formControlName="byteCode" rows="3" width="100%"></textarea>
+              <mat-hint align="start">Must start with 0x!</mat-hint>
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Gas Limit" formControlName="gasLimit">
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="setStep('contract')">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Use Contract
+            </mat-panel-title>
+            <mat-panel-description>
+              <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}} -->
+              Interact with a Smart Contract on GoChain
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <h2>NOTICE: This feature is still in development, only read-only "calls" are currently supported.</h2>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Contract Address" formControlName="contractAddress">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <textarea matInput placeholder="ABI / JSON Interface" formControlName="contractABI" rows="10" width="100%"></textarea>
+            </mat-form-field>
+            <div *ngIf="contract != null">
+              <mat-form-field >
+                <mat-select matInput placeholder="Choose Contract Function" formControlName="contractFunction">
+                  <mat-option *ngFor="let func of funcsToSelect()" [value]="func.name">
+                    {{func.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="func != null">
+                <mat-form-field *ngFor="let input of func.inputs">
+                  <input matInput placeholder="input.name" formControlName="input.name">
+                </mat-form-field>
+              </div>
+            </div>
+            <div *ngIf="functionResult != null">
+              <h3>Response</h3>
+              <div *ngFor="let k of functionResult">
+                  {{k[0]}}: <span style="font-weight: bold;">{{k[1]}}</span>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+      <div style="margin-top: 20px;">
+        <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending" style="margin: 0 auto;">Send</button>
       </div>
-          
-    </mat-card-content>
+      
+    </div>
+
+    <mat-card *ngIf="sending || receipt != null" style="margin-top: 12px;">
+        <mat-card-content>
+          <div *ngIf="sending">
+            <span>Transaction submitted, waiting for receipt...</span>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </div>
+          <div *ngIf="receipt != null">
+              Transaction complete!<br/>
+              TxHash: <a href="{{explorerHost()}}/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
+              <div *ngIf="receipt.contractAddress !== null">
+                  <b>Contract Address: {{ receipt.contractAddress }}</b>
+              </div>
+           
+          </div>
+              
+        </mat-card-content>
+      </mat-card>
+  
   </mat-card>
-</mat-card>
+
+  
+</form>
+
+<!-- 
+<div>
+  VALID? 
+  {{ txForm.valid }}
+</div> 
+-->

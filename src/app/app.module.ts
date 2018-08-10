@@ -6,7 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-        MatSelectModule} from '@angular/material';
+        MatSelectModule, MatExpansionModule, MatIconModule } from '@angular/material';
 
 import { Globals } from './globals';
 
@@ -21,7 +21,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { GetGoComponent } from './get-go/get-go.component';
 import { SendTxComponent } from './send-tx/send-tx.component';
 import { ChartsModule } from 'ng2-charts';
-import { DeployComponent } from './deploy/deploy.component';
 import { BalanceComponent } from './balance/balance.component';
 
 const appRoutes: Routes = [
@@ -29,7 +28,6 @@ const appRoutes: Routes = [
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'get-go', component: GetGoComponent },
   { path: 'send-tx', component: SendTxComponent },
-  { path: 'deploy', component: DeployComponent },
   // { path: 'hero/:id',      component: HeroDetailComponent },
   // {
   //   path: 'heroes',
@@ -55,7 +53,6 @@ const appRoutes: Routes = [
     GetGoComponent,
     SendTxComponent,
     ViewBalanceComponent,
-    DeployComponent,
     BalanceComponent
   ],
   imports: [
@@ -69,7 +66,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatCardModule, MatProgressSpinnerModule, MatProgressBarModule, MatToolbarModule, MatSnackBarModule,
-    MatSelectModule,
+    MatSelectModule, MatExpansionModule, MatIconModule,
     ChartsModule
   ],
   providers: [

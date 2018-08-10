@@ -5,6 +5,18 @@ import { environment } from '../environments/environment';
 export class Globals {
   network: string = 'mainnet';
 
+  constructor() {
+    let nw = localStorage.getItem('network');
+    if (nw !== null) {
+      this.network = nw;
+    }
+  }
+
+  setNetwork(network: string){
+    this.network = network;
+    localStorage.setItem('network', network);
+  }
+
   public rpcHost(): string {
     if (this.network == "testnet") {
       return "https://testnet-rpc.gochain.io";
