@@ -93,12 +93,15 @@
                   {{k[0]}}: <span style="font-weight: bold;">{{k[1]}}</span>
               </div>
             </div>
+            <div *ngIf="funcUnsupported != null">
+              {{funcUnsupported}}
+            </div>
           </div>
         </mat-expansion-panel>
       </mat-accordion>
       
       <div style="margin-top: 20px;">
-        <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending" style="margin: 0 auto;">Send</button>
+        <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending || !txForm.valid" style="margin: 0 auto;">Send</button>
       </div>
       
     </div>
@@ -130,5 +133,4 @@
 <div>
   VALID? 
   {{ txForm.valid }}
-</div> 
--->
+</div>  -->

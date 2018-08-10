@@ -25,6 +25,7 @@ export class SendTxComponent implements OnInit {
   contract: any;
   func: any;
   functionResult: any;
+  funcUnsupported: string;
 
   constructor(private walletService: WalletService, private fb: FormBuilder, private messageService: MessageService, private globals: Globals) {
     this.createForm();
@@ -115,6 +116,9 @@ export class SendTxComponent implements OnInit {
   }
 
   loadFunction(): void {
+    this.func = null;
+    this.functionResult = null;
+    this.funcUnsupported = null;
     let fname = this.txForm.get('contractFunction').value;
     console.log("fname:", fname);
     let abi = this.contract.options.jsonInterface;
@@ -125,11 +129,10 @@ export class SendTxComponent implements OnInit {
       if (func.name === fname) {
         this.func = func;
         // TODO: IF ANY INPUTS, add a sub formgroup 
-        if (func.constant) {
-          // if constant, just show value
+        if (func.constant) { // if constant, just show value immediately
           // There's a bug in the response here: https://github.com/ethereum/web3.js/issues/1566
           // So doing it myself... :frowning:
-          let m = this.contract.methods[func.name + "()"]();
+          let m = this.contract.methods[func.name ]();
           console.log("method:", m);
           console.log("m.encode:", m.encodeABI());
           // m.call({
@@ -169,16 +172,18 @@ export class SendTxComponent implements OnInit {
             })
             console.log("mapR:", arrR);
             this.functionResult = arrR;
-          }).catch(err => console.log(err));
+          }).catch(err => {
+            console.log(err);
+            this.messageService.add('ERROR: ' + err);
+          });
 
+        } else {
+          // must write a tx to get do this
+          if (func.inputs.length != 0) {
+            this.funcUnsupported = "Cannot use functions that require inputs yet, coming very soon..."
+            return;
+          }
 
-          // let tx = {
-          //   // from: this.fromAccount.address,
-          //   to: this.txForm.get('contractAddress').value,
-          //   data: m.encodeABI(),
-          //   gas: '2000000'
-          // }
-          // this.sendAndWait(this.fromAccount.privateKey, tx)
         }
         break;
       }
@@ -194,28 +199,59 @@ export class SendTxComponent implements OnInit {
   updateValidators(): void {
     if (this.step === 'send') {
       console.log("setting send validators")
-      this.txForm.get('byteCode').setValidators(null);
-      this.txForm.get('byteCode').updateValueAndValidity();
-      this.txForm.get('gasLimit').setValidators(null);
-      this.txForm.get('gasLimit').updateValueAndValidity();
+      this.unvalidateDeploy();
+      this.unvalidateContract();
 
       this.txForm.get('to').setValidators([Validators.required]);
       this.txForm.get('to').updateValueAndValidity();
       this.txForm.get('amount').setValidators([Validators.required, Validators.min(0.00000001)]);
       this.txForm.get('amount').updateValueAndValidity();
+
+      
     }
     if (this.step === 'deploy') {
       console.log("setting deploy validators")
-      this.txForm.get('to').setValidators(null);
-      this.txForm.get('to').updateValueAndValidity();
-      this.txForm.get('amount').setValidators(null);
-      this.txForm.get('amount').updateValueAndValidity();
+      this.unvalidateSend();
+      this.unvalidateContract();
 
       this.txForm.get('byteCode').setValidators([Validators.required]);
       this.txForm.get('byteCode').updateValueAndValidity();
       this.txForm.get('gasLimit').setValidators([Validators.required]);
       this.txForm.get('gasLimit').updateValueAndValidity();
     }
+    if (this.step === 'contract') {
+      console.log("setting contract validators")
+      this.unvalidateSend();
+      this.unvalidateDeploy();
+
+      this.txForm.get('contractAddress').setValidators(null);
+      this.txForm.get('contractAddress').updateValueAndValidity();
+      this.txForm.get('contractABI').setValidators(null);
+      this.txForm.get('contractABI').updateValueAndValidity(); 
+
+
+    }
+  }
+
+  unvalidateSend(): void {
+    this.txForm.get('to').setValidators(null);
+    this.txForm.get('to').updateValueAndValidity();
+    this.txForm.get('amount').setValidators(null);
+    this.txForm.get('amount').updateValueAndValidity();
+  }
+
+  unvalidateDeploy(): void {
+    this.txForm.get('byteCode').setValidators(null);
+    this.txForm.get('byteCode').updateValueAndValidity();
+    this.txForm.get('gasLimit').setValidators(null);
+    this.txForm.get('gasLimit').updateValueAndValidity();      
+  }
+
+  unvalidateContract(): void {
+    this.txForm.get('byteCode').setValidators(null);
+    this.txForm.get('byteCode').updateValueAndValidity();
+    this.txForm.get('gasLimit').setValidators(null);
+    this.txForm.get('gasLimit').updateValueAndValidity();      
   }
 
   validate(): boolean {
@@ -275,6 +311,16 @@ export class SendTxComponent implements OnInit {
     if (this.step === 'deploy') {
       let byteCode = this.txForm.get('byteCode').value;
       tx = {data: byteCode, gas: '2000000'}
+    } else if (this.step === 'contract') {
+      let m = this.contract.methods[this.func.name]();
+      console.log("method:", m);
+      console.log("m.encode:", m.encodeABI());
+      tx = {
+        // from: this.fromAccount.address,
+        to: this.txForm.get('contractAddress').value,
+        data: m.encodeABI(),
+        gas: '2000000'
+      }
     } else {
       let to = this.txForm.get('to').value;
       if (!this.walletService.isAddress(to)){
@@ -309,6 +355,7 @@ export class SendTxComponent implements OnInit {
     err => {
       console.error('ERROR:', err);
       this.messageService.add("ERROR! " + err);
+      this.sending = false;
     },
     () => {
       this.sending = false;
