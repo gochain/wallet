@@ -15,10 +15,6 @@ let abi = {
     ]
 }
 let sig = web3.eth.abi.encodeFunctionCall(abi, [])
-// .then(result => {
-//     console.log(result);
-// })
-
 console.log(sig);
 
 web3.eth.call({
