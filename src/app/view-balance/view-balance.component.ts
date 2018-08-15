@@ -60,7 +60,6 @@ export class ViewBalanceComponent implements OnInit {
 
   onChanges(): void {
     this.balForm.get('address').valueChanges.subscribe(val => {
-      console.log('changed', val);
       this.updateBalance();
     });
 

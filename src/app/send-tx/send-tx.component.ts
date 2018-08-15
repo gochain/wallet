@@ -62,7 +62,6 @@ export class SendTxComponent implements OnInit {
 
   onChanges(): void {
     this.txForm.get('privateKey').valueChanges.subscribe(val => {
-      console.log("changed", val);
       this.fromAccount = null;
       this.balance.reset();
       this.updateBalance();
