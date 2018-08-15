@@ -27,11 +27,11 @@
 
   </mat-toolbar-row>
 
-
-  <div class="show-small" style="font-size: 80%;">
+  <!-- this is a row that only shows on small devices -->
+  <mat-toolbar-row class="show-small" style="font-size: 80%;">
     <a mat-button routerLink="/create-account" [class.active]="router.url === '/create-account'">Create Account</a>
     <a mat-button routerLink="/send-tx" [class.active]="router.url === '/send-tx'">Open Wallet</a>
-  </div>
+  </mat-toolbar-row>
 
 </mat-toolbar>
 
