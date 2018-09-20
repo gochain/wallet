@@ -4,20 +4,21 @@
 
   <mat-card class="full-card">
     <!-- <mat-card-title>Send Transaction or Deploy a Contract</mat-card-title> -->
-      <div class="form-group" id="div-tx-form" style="margin-bottom: 20px;">
-        <mat-form-field class="full-width">
-          <input (focus)="showPK = true" (focusout)="showPK = false" [attr.type]="showPK ? 'text' : 'password'" matInput placeholder="Private Key or Address" formControlName="privateKey">
-          <mat-icon matSuffix (click)="togglePKView()">{{ eyeIcon }}</mat-icon>
-          <mat-hint align="start">Enter your private key to perform operations or address to see balance.</mat-hint>
-        </mat-form-field>
-        <div style="margin-top: 14px;">
-          <app-balance #balance ></app-balance>
-        </div>
+    <div class="form-group" id="div-tx-form" style="margin-bottom: 20px;">
+      <mat-form-field class="full-width">
+        <input (focus)="showPK = true" (focusout)="showPK = false" [attr.type]="showPK ? 'text' : 'password'" matInput
+          placeholder="Private Key or Address" formControlName="privateKey">
+        <mat-icon matSuffix (click)="togglePKView()">{{ eyeIcon }}</mat-icon>
+        <mat-hint align="start">Enter your private key to perform operations or address to see balance.</mat-hint>
+      </mat-form-field>
+      <div style="margin-top: 14px;">
+        <app-balance #balance></app-balance>
       </div>
-  
+    </div>
+
 
     <div *ngIf="fromAccount != null">
-      <mat-accordion >
+      <mat-accordion>
         <mat-expansion-panel [expanded]="step === 'send'" (opened)="setStep('send')">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -27,13 +28,13 @@
               Perform a regular transaction, send GO to another account
             </mat-panel-description>
           </mat-expansion-panel-header>
-  
-            <mat-form-field class="full-width">
-              <input matInput placeholder="To" formControlName="to">
-            </mat-form-field>
-            <mat-form-field class="full-width">
-              <input matInput placeholder="Amount" formControlName="amount">
-            </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput placeholder="To" formControlName="to">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Amount" formControlName="amount">
+          </mat-form-field>
         </mat-expansion-panel>
         <mat-expansion-panel (opened)="setStep('deploy')">
           <mat-expansion-panel-header>
@@ -74,23 +75,25 @@
               <textarea matInput placeholder="ABI / JSON Interface" formControlName="contractABI" rows="10" width="100%"></textarea>
             </mat-form-field>
             <div *ngIf="contract != null">
-              <mat-form-field >
+              <mat-form-field>
                 <mat-select matInput placeholder="Choose Contract Function" formControlName="contractFunction">
                   <mat-option *ngFor="let func of funcsToSelect()" [value]="func.name">
                     {{func.name}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div *ngIf="func != null">
-                <mat-form-field *ngFor="let input of func.inputs">
-                  <input matInput placeholder="input.name" formControlName="input.name">
-                </mat-form-field>
+              <div *ngIf="functionParameters.controls.length != null">
+                <div formArrayName="functionParameters">
+                  <mat-form-field *ngFor="let control of functionParameters.controls; let i=index">                    
+                    <input matInput placeholder="sample{{i}}" formControlName="{{i}}">
+                  </mat-form-field>
+                </div>
               </div>
             </div>
             <div *ngIf="functionResult != null">
               <h3>Response</h3>
               <div *ngFor="let k of functionResult">
-                  {{k[0]}}: <span style="font-weight: bold;">{{k[1]}}</span>
+                {{k[0]}}: <span style="font-weight: bold;">{{k[1]}}</span>
               </div>
             </div>
             <div *ngIf="funcUnsupported != null">
@@ -99,34 +102,35 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      
+
       <div style="margin-top: 20px;">
         <button mat-raised-button color="primary" (click)="sendTx()" [disabled]="sending || !txForm.valid" style="margin: 0 auto;">Send</button>
       </div>
-      
+
     </div>
 
     <mat-card *ngIf="sending || receipt != null" style="margin-top: 12px;">
-        <mat-card-content>
-          <div *ngIf="sending">
-            <span>Transaction submitted, waiting for receipt...</span>
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <mat-card-content>
+        <div *ngIf="sending">
+          <span>Transaction submitted, waiting for receipt...</span>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div *ngIf="receipt != null">
+          Transaction complete!<br />
+          TxHash: <a href="{{explorerHost()}}/tx/{{receipt.transactionHash}}" target="_blank">{{
+            receipt.transactionHash }}</a>
+          <div *ngIf="receipt.contractAddress !== null">
+            <b>Contract Address: {{ receipt.contractAddress }}</b>
           </div>
-          <div *ngIf="receipt != null">
-              Transaction complete!<br/>
-              TxHash: <a href="{{explorerHost()}}/tx/{{receipt.transactionHash}}" target="_blank">{{ receipt.transactionHash }}</a>
-              <div *ngIf="receipt.contractAddress !== null">
-                  <b>Contract Address: {{ receipt.contractAddress }}</b>
-              </div>
-           
-          </div>
-              
-        </mat-card-content>
-      </mat-card>
-  
+
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
   </mat-card>
 
-  
+
 </form>
 
 <!-- 
