@@ -67,10 +67,12 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div>
-            <h2>NOTICE: This feature is still in development, only read-only "calls" are currently supported.</h2>
             <mat-form-field class="full-width">
               <input matInput placeholder="Contract Address" formControlName="contractAddress">
             </mat-form-field>
+            <mat-form-field class="full-width">
+                <input matInput placeholder="Amount" formControlName="contractAmount">
+              </mat-form-field>
             <mat-form-field class="full-width">
               <textarea matInput placeholder="ABI / JSON Interface" formControlName="contractABI" rows="10" width="100%"></textarea>
             </mat-form-field>
@@ -83,9 +85,9 @@
                 </mat-select>
               </mat-form-field>
               <div *ngIf="functionParameters.controls.length != null">
-                <div formArrayName="functionParameters">
-                  <mat-form-field *ngFor="let control of functionParameters.controls; let i=index">                    
-                    <input matInput placeholder="sample{{i}}" formControlName="{{i}}">
+                <div formArrayName="functionParameters" *ngFor="let control of functionParameters.controls; let i=index">
+                  <mat-form-field>
+                    <input matInput placeholder="{{functionName(i)}}" formControlName="{{i}}"><br />
                   </mat-form-field>
                 </div>
               </div>

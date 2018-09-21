@@ -44,6 +44,7 @@ export class SendTxComponent implements OnInit {
       byteCode: [''],
       gasLimit: ['300000', []],
       contractAddress: ['', []],
+      contractAmount: ['', []],
       contractABI: ['', []],
       contractFunction: [''],
       functionParameters: this.fb.array([
@@ -55,8 +56,18 @@ export class SendTxComponent implements OnInit {
     return this.txForm.get('functionParameters') as FormArray;
   }
 
-  addFunctionParameter() {        
+  functionName(index) {
+    return this.func.inputs[index].name
+  }
+
+  addFunctionParameter() {
     this.functionParameters.push(this.fb.control(''));
+  }
+
+  resetFunctionParameter() {
+    while (this.functionParameters.length !== 0) {
+      this.functionParameters.removeAt(0)
+    }
   }
 
   togglePKView() {
@@ -128,6 +139,7 @@ export class SendTxComponent implements OnInit {
     this.func = null;
     this.functionResult = null;
     this.funcUnsupported = null;
+    this.resetFunctionParameter();
     let fname = this.txForm.get('contractFunction').value;
     console.log("fname:", fname);
     let abi = this.contract.options.jsonInterface;
@@ -188,12 +200,10 @@ export class SendTxComponent implements OnInit {
 
         } else {
           // must write a tx to get do this
-          if (func.inputs.length != 0) {
+          if (func.inputs.length != 0) {            
             for (let input of func.inputs) {
               this.addFunctionParameter();
             }
-            console.log("functionParameters:", this.functionParameters.controls)
-            this.funcUnsupported = "Cannot use functions that require inputs yet, coming very soon..."
             return;
           }
 
@@ -325,7 +335,14 @@ export class SendTxComponent implements OnInit {
       let byteCode = this.txForm.get('byteCode').value;
       tx = { data: byteCode, gas: '2000000' }
     } else if (this.step === 'contract') {
-      let m = this.contract.methods[this.func.name]();
+      let params = []
+      if (this.func.inputs.length > 0) {
+        let amount = this.txForm.get('contractAmount').value;
+        for (var control of this.functionParameters.controls) {
+          params.push(control.value);
+        }
+      }
+      let m = this.contract.methods[this.func.name](...params);
       console.log("method:", m);
       console.log("m.encode:", m.encodeABI());
       tx = {
