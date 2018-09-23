@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {Globals} from '../globals'
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Globals } from '../globals'
 import { WalletService } from '../wallet.service';
 import { MessageService } from '../message.service';
 
@@ -19,7 +19,7 @@ export class SendTxComponent implements OnInit {
   fromAccount: any;
   @ViewChild('balance') balance;
   sending: boolean = false;
-  receipt: Map<string,any>;
+  receipt: Map<string, any>;
 
   // Contract stuff
   contract: any;
@@ -38,15 +38,40 @@ export class SendTxComponent implements OnInit {
 
   createForm() {
     this.txForm = this.fb.group({
-      privateKey: ['', {validators: Validators.required /*, updateOn: 'blur'*/ } ],
+      privateKey: ['', { validators: Validators.required /*, updateOn: 'blur'*/ }],
       to: ['', []],
-      amount: ['', [] ],
+      amount: ['', []],
       byteCode: [''],
       gasLimit: ['300000', []],
       contractAddress: ['', []],
+      contractAmount: ['', []],
       contractABI: ['', []],
-      contractFunction: ['']
-    });
+      contractFunction: [''],
+      functionParameters: this.fb.array([
+      ])
+    })
+  }
+
+  get functionParameters() {
+    return this.txForm.get('functionParameters') as FormArray;
+  }
+
+  functionName(index) {
+    return this.func.inputs[index].name
+  }
+
+  functionPayable():boolean {
+    return this.func && this.func.payable
+  }
+
+  addFunctionParameter() {
+    this.functionParameters.push(this.fb.control(''));
+  }
+
+  resetFunctionParameter() {    
+    while (this.functionParameters.length !== 0) {
+      this.functionParameters.removeAt(0)
+    }
   }
 
   togglePKView() {
@@ -76,7 +101,7 @@ export class SendTxComponent implements OnInit {
     });
     this.txForm.get('contractFunction').valueChanges.subscribe(val => {
       console.log("contract function:", val);
-      this.loadFunction(); 
+      this.loadFunction();
     });
   }
 
@@ -88,7 +113,7 @@ export class SendTxComponent implements OnInit {
       if (abi.length > 0) {
         try {
           abi = JSON.parse(abi);
-        } catch(e) {
+        } catch (e) {
           console.log("parse error:", e);
           return;
         }
@@ -100,6 +125,40 @@ export class SendTxComponent implements OnInit {
       }
     }
   }
+  callABIFunction(func: any, params: string[]): void {
+    let m = this.contract.methods[func.name](...params);
+    let web3 = this.walletService.w3();
+    console.log("PARAMS:", params);
+    let funcABI = web3.eth.abi.encodeFunctionCall(func, params);
+    console.log("funcABI:", "" + funcABI);
+    web3.eth.call({
+      to: this.contract.options.address,
+      data: "" + funcABI
+    }).then(result => {
+      console.log("result:", result);
+      let decoded = web3.eth.abi.decodeLog(func.outputs, result, []);
+      console.log("decoded:", decoded);
+      // This Result object is frikin stupid, it's literaly an empty object that they add fields too
+      // convert to something iterable
+      let arrR: Array<Array<any>> = new Array<Array<any>>();
+      // let mapR: Map<any,any> = new Map<any,any>();
+      // for (let j = 0; j < decoded.__length__; j++){
+      //   mapR.push([decoded[0], decoded[1]])
+      // }
+      Object.keys(decoded).forEach(function (key, index) {
+        // mapR[key] = decoded[key];
+        if (key.startsWith("__")) {
+          return;
+        }
+        arrR.push([key, decoded[key]]);
+      })
+      console.log("mapR:", arrR);
+      this.functionResult = arrR;
+    }).catch(err => {
+      console.log(err);
+      this.messageService.add('ERROR: ' + err);
+    });
+  }
 
   funcsToSelect(): string[] {
     let ret: string[] = [];
@@ -107,7 +166,7 @@ export class SendTxComponent implements OnInit {
     // console.log("abi:", abi);
     for (let i = 0; i < abi.length; i++) {
       let func = abi[i];
-      if (func.type === "function"){
+      if (func.type === "function") {
         ret.push(func);
       }
     }
@@ -118,6 +177,7 @@ export class SendTxComponent implements OnInit {
     this.func = null;
     this.functionResult = null;
     this.funcUnsupported = null;
+    this.resetFunctionParameter();
     let fname = this.txForm.get('contractFunction').value;
     console.log("fname:", fname);
     let abi = this.contract.options.jsonInterface;
@@ -128,58 +188,16 @@ export class SendTxComponent implements OnInit {
       if (func.name === fname) {
         this.func = func;
         // TODO: IF ANY INPUTS, add a sub formgroup 
-        if (func.constant) { // if constant, just show value immediately
+        if (func.constant && func.inputs.length == 0) { // if constant, just show value immediately
           // There's a bug in the response here: https://github.com/ethereum/web3.js/issues/1566
           // So doing it myself... :frowning:
-          let m = this.contract.methods[func.name ]();
-          console.log("method:", m);
-          console.log("m.encode:", m.encodeABI());
-          // m.call({
-          //   from: this.fromAccount.address,
-          //   gasPrice: "2",
-          //   gas: "50000"
-          // })
-          // .then(function(result){
-          //   console.log("result:", result);
-          //   this.functionResult = result;
-          // });
-          // 
-          // manually doing above:
-          let web3 = this.walletService.w3();
-          let funcABI = web3.eth.abi.encodeFunctionCall(func, []);
-          console.log("funcABI:", "" + funcABI);
-          web3.eth.call({
-            to: this.contract.options.address,
-            data: "" + funcABI
-          }).then(result => {
-            console.log("result:", result);
-            let decoded = web3.eth.abi.decodeLog(func.outputs, result, []);
-            console.log("decoded:", decoded);
-            // This Result object is frikin stupid, it's literaly an empty object that they add fields too
-            // convert to something iterable
-            let arrR: Array<Array<any>> = new Array<Array<any>>();
-            // let mapR: Map<any,any> = new Map<any,any>();
-            // for (let j = 0; j < decoded.__length__; j++){
-            //   mapR.push([decoded[0], decoded[1]])
-            // }
-            Object.keys(decoded).forEach(function(key,index){
-              // mapR[key] = decoded[key];
-              if (key.startsWith("__")) {
-                return;
-              }
-              arrR.push([key,decoded[key]]);
-            })
-            console.log("mapR:", arrR);
-            this.functionResult = arrR;
-          }).catch(err => {
-            console.log(err);
-            this.messageService.add('ERROR: ' + err);
-          });
-
+          this.callABIFunction(func, [])
         } else {
           // must write a tx to get do this
-          if (func.inputs.length != 0) {
-            this.funcUnsupported = "Cannot use functions that require inputs yet, coming very soon..."
+          if (func.inputs.length > 0) {
+            for (let input of func.inputs) {
+              this.addFunctionParameter();
+            }
             return;
           }
 
@@ -206,7 +224,7 @@ export class SendTxComponent implements OnInit {
       this.txForm.get('amount').setValidators([Validators.required, Validators.min(0.00000001)]);
       this.txForm.get('amount').updateValueAndValidity();
 
-      
+
     }
     if (this.step === 'deploy') {
       console.log("setting deploy validators")
@@ -226,7 +244,7 @@ export class SendTxComponent implements OnInit {
       this.txForm.get('contractAddress').setValidators(null);
       this.txForm.get('contractAddress').updateValueAndValidity();
       this.txForm.get('contractABI').setValidators(null);
-      this.txForm.get('contractABI').updateValueAndValidity(); 
+      this.txForm.get('contractABI').updateValueAndValidity();
 
 
     }
@@ -243,14 +261,14 @@ export class SendTxComponent implements OnInit {
     this.txForm.get('byteCode').setValidators(null);
     this.txForm.get('byteCode').updateValueAndValidity();
     this.txForm.get('gasLimit').setValidators(null);
-    this.txForm.get('gasLimit').updateValueAndValidity();      
+    this.txForm.get('gasLimit').updateValueAndValidity();
   }
 
   unvalidateContract(): void {
     this.txForm.get('byteCode').setValidators(null);
     this.txForm.get('byteCode').updateValueAndValidity();
     this.txForm.get('gasLimit').setValidators(null);
-    this.txForm.get('gasLimit').updateValueAndValidity();      
+    this.txForm.get('gasLimit').updateValueAndValidity();
   }
 
   validate(): boolean {
@@ -274,11 +292,11 @@ export class SendTxComponent implements OnInit {
       }
     }
     let addr = null;
-    if (pk.length === 66){
+    if (pk.length === 66) {
       try {
         this.fromAccount = this.walletService.w3().eth.accounts.privateKeyToAccount(pk);
         addr = this.fromAccount.address;
-      } catch(e) {
+      } catch (e) {
         this.messageService.add('ERROR: ' + e);
         return;
       }
@@ -298,31 +316,52 @@ export class SendTxComponent implements OnInit {
     }
     this.receipt = null;
 
-    if(!this.validate()){
+    if (!this.validate()) {
       return;
     }
 
-    let pk = this.txForm.get('privateKey').value;  
-    
+    let pk = this.txForm.get('privateKey').value;
     this.sending = true;
-    let tx = null;
-    
+    let tx = {};
+
     if (this.step === 'deploy') {
       let byteCode = this.txForm.get('byteCode').value;
-      tx = {data: byteCode, gas: '2000000'}
+      tx = { data: byteCode, gas: '2000000' }
     } else if (this.step === 'contract') {
-      let m = this.contract.methods[this.func.name]();
-      console.log("method:", m);
-      console.log("m.encode:", m.encodeABI());
-      tx = {
-        // from: this.fromAccount.address,
-        to: this.txForm.get('contractAddress').value,
-        data: m.encodeABI(),
-        gas: '2000000'
+      let params: string[] = [];
+      if (this.func.inputs.length > 0) {
+        for (var control of this.functionParameters.controls) {
+          params.push(control.value);
+        }
+      }
+      if (this.func.payable) {
+        console.log("Payable function")
+        let amount = this.txForm.get('contractAmount').value;
+        try {
+          amount = this.walletService.w3().utils.toWei(amount, 'ether')
+        } catch (e) {
+          this.messageService.add('Cannot convert amount, ERROR: ' + e);
+          this.sending = false;
+          return;
+        }
+        tx = { value: amount }
+        let m = this.contract.methods[this.func.name](...params);
+        console.log("method:", m);
+        console.log("m.encode:", m.encodeABI());
+        Object.assign(tx, tx, {
+          to: this.txForm.get('contractAddress').value,
+          data: m.encodeABI(),
+          gas: '2000000'
+        });
+      } else {
+        console.log("Free function with parameters")
+        this.callABIFunction(this.func, params)
+        this.sending = false;
+        return;
       }
     } else {
       let to = this.txForm.get('to').value;
-      if (!this.walletService.isAddress(to)){
+      if (!this.walletService.isAddress(to)) {
         console.error('ERROR: Invalid TO address.');
         this.messageService.add('ERROR: Invalid TO address.');
         return;
@@ -331,14 +370,15 @@ export class SendTxComponent implements OnInit {
       // now send tx
       try {
         amount = this.walletService.w3().utils.toWei(amount, 'ether')
-      } catch(e) {
+      } catch (e) {
         // todo: try catch this whole function?
         this.messageService.add('ERROR: ' + e);
         this.sending = false;
         return;
       }
-      tx = {to: to, value: amount, gas: '2000000'}
+      tx = { to: to, value: amount, gas: '2000000' }
     }
+    console.log("TX:", tx);
     this.sendAndWait(pk, tx)
   }
 
@@ -351,14 +391,14 @@ export class SendTxComponent implements OnInit {
       this.receipt = receipt;
       this.balance.update(pk);
     },
-    err => {
-      console.error('ERROR:', err);
-      this.messageService.add("ERROR! " + err);
-      this.sending = false;
-    },
-    () => {
-      this.sending = false;
-    })
+      err => {
+        console.error('ERROR:', err);
+        this.messageService.add("ERROR! " + err);
+        this.sending = false;
+      },
+      () => {
+        this.sending = false;
+      })
   }
 
   public explorerHost() {
