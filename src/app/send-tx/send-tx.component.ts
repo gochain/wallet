@@ -60,11 +60,15 @@ export class SendTxComponent implements OnInit {
     return this.func.inputs[index].name
   }
 
+  functionPayable():boolean {
+    return this.func && this.func.payable
+  }
+
   addFunctionParameter() {
     this.functionParameters.push(this.fb.control(''));
   }
 
-  resetFunctionParameter() {
+  resetFunctionParameter() {    
     while (this.functionParameters.length !== 0) {
       this.functionParameters.removeAt(0)
     }
@@ -121,6 +125,40 @@ export class SendTxComponent implements OnInit {
       }
     }
   }
+  callABIFunction(func: any, params: string[]): void {
+    let m = this.contract.methods[func.name](...params);
+    let web3 = this.walletService.w3();
+    console.log("PARAMS:", params);
+    let funcABI = web3.eth.abi.encodeFunctionCall(func, params);
+    console.log("funcABI:", "" + funcABI);
+    web3.eth.call({
+      to: this.contract.options.address,
+      data: "" + funcABI
+    }).then(result => {
+      console.log("result:", result);
+      let decoded = web3.eth.abi.decodeLog(func.outputs, result, []);
+      console.log("decoded:", decoded);
+      // This Result object is frikin stupid, it's literaly an empty object that they add fields too
+      // convert to something iterable
+      let arrR: Array<Array<any>> = new Array<Array<any>>();
+      // let mapR: Map<any,any> = new Map<any,any>();
+      // for (let j = 0; j < decoded.__length__; j++){
+      //   mapR.push([decoded[0], decoded[1]])
+      // }
+      Object.keys(decoded).forEach(function (key, index) {
+        // mapR[key] = decoded[key];
+        if (key.startsWith("__")) {
+          return;
+        }
+        arrR.push([key, decoded[key]]);
+      })
+      console.log("mapR:", arrR);
+      this.functionResult = arrR;
+    }).catch(err => {
+      console.log(err);
+      this.messageService.add('ERROR: ' + err);
+    });
+  }
 
   funcsToSelect(): string[] {
     let ret: string[] = [];
@@ -150,57 +188,13 @@ export class SendTxComponent implements OnInit {
       if (func.name === fname) {
         this.func = func;
         // TODO: IF ANY INPUTS, add a sub formgroup 
-        if (func.constant) { // if constant, just show value immediately
+        if (func.constant && func.inputs.length == 0) { // if constant, just show value immediately
           // There's a bug in the response here: https://github.com/ethereum/web3.js/issues/1566
           // So doing it myself... :frowning:
-          let m = this.contract.methods[func.name]();
-          console.log("method:", m);
-          console.log("m.encode:", m.encodeABI());
-          // m.call({
-          //   from: this.fromAccount.address,
-          //   gasPrice: "2",
-          //   gas: "50000"
-          // })
-          // .then(function(result){
-          //   console.log("result:", result);
-          //   this.functionResult = result;
-          // });
-          // 
-          // manually doing above:
-          let web3 = this.walletService.w3();
-          let funcABI = web3.eth.abi.encodeFunctionCall(func, []);
-          console.log("funcABI:", "" + funcABI);
-          web3.eth.call({
-            to: this.contract.options.address,
-            data: "" + funcABI
-          }).then(result => {
-            console.log("result:", result);
-            let decoded = web3.eth.abi.decodeLog(func.outputs, result, []);
-            console.log("decoded:", decoded);
-            // This Result object is frikin stupid, it's literaly an empty object that they add fields too
-            // convert to something iterable
-            let arrR: Array<Array<any>> = new Array<Array<any>>();
-            // let mapR: Map<any,any> = new Map<any,any>();
-            // for (let j = 0; j < decoded.__length__; j++){
-            //   mapR.push([decoded[0], decoded[1]])
-            // }
-            Object.keys(decoded).forEach(function (key, index) {
-              // mapR[key] = decoded[key];
-              if (key.startsWith("__")) {
-                return;
-              }
-              arrR.push([key, decoded[key]]);
-            })
-            console.log("mapR:", arrR);
-            this.functionResult = arrR;
-          }).catch(err => {
-            console.log(err);
-            this.messageService.add('ERROR: ' + err);
-          });
-
+          this.callABIFunction(func, [])
         } else {
           // must write a tx to get do this
-          if (func.inputs.length != 0) {            
+          if (func.inputs.length > 0) {
             for (let input of func.inputs) {
               this.addFunctionParameter();
             }
@@ -327,29 +321,43 @@ export class SendTxComponent implements OnInit {
     }
 
     let pk = this.txForm.get('privateKey').value;
-
     this.sending = true;
-    let tx = null;
+    let tx = {};
 
     if (this.step === 'deploy') {
       let byteCode = this.txForm.get('byteCode').value;
       tx = { data: byteCode, gas: '2000000' }
     } else if (this.step === 'contract') {
-      let params = []
+      let params: string[] = [];
       if (this.func.inputs.length > 0) {
-        let amount = this.txForm.get('contractAmount').value;
         for (var control of this.functionParameters.controls) {
           params.push(control.value);
         }
       }
-      let m = this.contract.methods[this.func.name](...params);
-      console.log("method:", m);
-      console.log("m.encode:", m.encodeABI());
-      tx = {
-        // from: this.fromAccount.address,
-        to: this.txForm.get('contractAddress').value,
-        data: m.encodeABI(),
-        gas: '2000000'
+      if (this.func.payable) {
+        console.log("Payable function")
+        let amount = this.txForm.get('contractAmount').value;
+        try {
+          amount = this.walletService.w3().utils.toWei(amount, 'ether')
+        } catch (e) {
+          this.messageService.add('Cannot convert amount, ERROR: ' + e);
+          this.sending = false;
+          return;
+        }
+        tx = { value: amount }
+        let m = this.contract.methods[this.func.name](...params);
+        console.log("method:", m);
+        console.log("m.encode:", m.encodeABI());
+        Object.assign(tx, tx, {
+          to: this.txForm.get('contractAddress').value,
+          data: m.encodeABI(),
+          gas: '2000000'
+        });
+      } else {
+        console.log("Free function with parameters")
+        this.callABIFunction(this.func, params)
+        this.sending = false;
+        return;
       }
     } else {
       let to = this.txForm.get('to').value;
@@ -370,6 +378,7 @@ export class SendTxComponent implements OnInit {
       }
       tx = { to: to, value: amount, gas: '2000000' }
     }
+    console.log("TX:", tx);
     this.sendAndWait(pk, tx)
   }
 
