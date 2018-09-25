@@ -60,7 +60,7 @@ export class SendTxComponent implements OnInit {
     return this.func.inputs[index].name
   }
 
-  functionPayable():boolean {
+  functionPayable(): boolean {
     return this.func && this.func.payable
   }
 
@@ -68,7 +68,7 @@ export class SendTxComponent implements OnInit {
     this.functionParameters.push(this.fb.control(''));
   }
 
-  resetFunctionParameter() {    
+  resetFunctionParameter() {
     while (this.functionParameters.length !== 0) {
       this.functionParameters.removeAt(0)
     }
@@ -334,6 +334,9 @@ export class SendTxComponent implements OnInit {
           params.push(control.value);
         }
       }
+      let m = this.contract.methods[this.func.name](...params);
+      console.log("method:", m);
+      console.log("m.encode:", m.encodeABI());
       if (this.func.payable) {
         console.log("Payable function")
         let amount = this.txForm.get('contractAmount').value;
@@ -345,11 +348,16 @@ export class SendTxComponent implements OnInit {
           return;
         }
         tx = { value: amount }
-        let m = this.contract.methods[this.func.name](...params);
-        console.log("method:", m);
-        console.log("m.encode:", m.encodeABI());
         Object.assign(tx, tx, {
           to: this.txForm.get('contractAddress').value,
+          data: m.encodeABI(),
+          gas: '2000000'
+        });
+      } else if (this.func.constant == false) {
+        console.log("Non-constant function with parameters")
+        Object.assign(tx, tx, {
+          to: this.txForm.get('contractAddress').value,
+          amount: 0,
           data: m.encodeABI(),
           gas: '2000000'
         });
