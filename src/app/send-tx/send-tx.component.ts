@@ -326,6 +326,9 @@ export class SendTxComponent implements OnInit {
 
     if (this.step === 'deploy') {
       let byteCode = this.txForm.get('byteCode').value;
+      if (!byteCode.startsWith("0x")) {
+        byteCode = '0x' + byteCode;
+      }
       tx = { data: byteCode, gas: '2000000' }
     } else if (this.step === 'contract') {
       let params: string[] = [];
