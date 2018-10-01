@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {Globals} from './globals'
 import { WalletService } from './wallet.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { WalletService } from './wallet.service';
 })
 export class AppComponent {
   title = 'GoChain Wallet';
+  public version: string = environment.VERSION;
   public network: string;
 
   constructor(private globals: Globals, private walletService: WalletService, public router: Router) {
