@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Globals } from '../globals'
 import { WalletService } from '../wallet.service';
 import { MessageService } from '../message.service';
@@ -36,9 +36,16 @@ export class SendTxComponent implements OnInit {
     this.updateBalance(); // help for dev if pk already set. 
   }
 
+  checkKeys(fc: FormControl) {
+    let address_or_key = fc.value.toLowerCase()
+    if (/^(0x)?[0-9a-f]{40}$/i.test(address_or_key) || /^[0-9a-f]{40}$/i.test(address_or_key) || /^[0-9a-f]{64}$/i.test(address_or_key) || /^(0x)?[0-9a-f]{64}$/i.test(address_or_key)) {      
+      return (null);
+    }
+    return ({ checkKeys: true });
+  }
   createForm() {
     this.txForm = this.fb.group({
-      privateKey: ['', { validators: Validators.required /*, updateOn: 'blur'*/ }],
+      privateKey: ['', { validators: Validators.compose([Validators.required, this.checkKeys]) }],
       to: ['', []],
       amount: ['', []],
       byteCode: [''],
