@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 @Injectable()
 export class Globals {
   network: string = 'mainnet';
+  version: string = '1.1.20'
 
   constructor() {
     let nw = localStorage.getItem('network');

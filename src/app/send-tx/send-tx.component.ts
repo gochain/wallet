@@ -49,7 +49,7 @@ export class SendTxComponent implements OnInit {
       to: ['', []],
       amount: ['', []],
       byteCode: [''],
-      gasLimit: ['300000', []],
+      gasLimit: ['500000', []],
       contractAddress: ['', []],
       contractAmount: ['', []],
       contractABI: ['', []],
@@ -330,13 +330,13 @@ export class SendTxComponent implements OnInit {
     let pk = this.txForm.get('privateKey').value;
     this.sending = true;
     let tx = {};
-
+    let gasLimit = this.txForm.get('gasLimit').value;
     if (this.step === 'deploy') {
       let byteCode = this.txForm.get('byteCode').value;
       if (!byteCode.startsWith("0x")) {
         byteCode = '0x' + byteCode;
       }
-      tx = { data: byteCode, gas: '2000000' }
+      tx = { data: byteCode, gas: gasLimit }
     } else if (this.step === 'contract') {
       let params: string[] = [];
       if (this.func.inputs.length > 0) {
@@ -344,9 +344,7 @@ export class SendTxComponent implements OnInit {
           params.push(control.value);
         }
       }
-      let m = this.contract.methods[this.func.name](...params);
-      console.log("method:", m);
-      console.log("m.encode:", m.encodeABI());
+      let m = this.contract.methods[this.func.name](...params);      
       if (this.func.payable) {
         console.log("Payable function")
         let amount = this.txForm.get('contractAmount').value;
@@ -361,7 +359,7 @@ export class SendTxComponent implements OnInit {
         Object.assign(tx, tx, {
           to: this.txForm.get('contractAddress').value,
           data: m.encodeABI(),
-          gas: '2000000'
+          gas: gasLimit
         });
       } else if (this.func.constant == false) {
         console.log("Non-constant function with parameters")
@@ -369,7 +367,7 @@ export class SendTxComponent implements OnInit {
           to: this.txForm.get('contractAddress').value,
           amount: 0,
           data: m.encodeABI(),
-          gas: '2000000'
+          gas: gasLimit
         });
       } else {
         console.log("Free function with parameters")
@@ -394,7 +392,7 @@ export class SendTxComponent implements OnInit {
         this.sending = false;
         return;
       }
-      tx = { to: to, value: amount, gas: '2000000' }
+      tx = { to: to, value: amount, gas: gasLimit }
     }
     console.log("TX:", tx);
     this.sendAndWait(pk, tx)
