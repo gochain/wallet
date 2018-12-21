@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent {
   title = 'GoChain Wallet';
-  public version: string = environment.VERSION;
+  public version: string = this.globals.version;
   public network: string;
 
   constructor(private globals: Globals, private walletService: WalletService, public router: Router) {
