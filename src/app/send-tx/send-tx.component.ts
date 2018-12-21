@@ -49,11 +49,12 @@ export class SendTxComponent implements OnInit {
       to: ['', []],
       amount: ['', []],
       byteCode: [''],
-      gasLimit: ['500000', []],
+      deployGasLimit: ['2000000', []],
       contractAddress: ['', []],
       contractAmount: ['', []],
       contractABI: ['', []],
       contractFunction: [''],
+      contractGasLimit: ['500000', []],
       functionParameters: this.fb.array([
       ])
     })
@@ -69,6 +70,10 @@ export class SendTxComponent implements OnInit {
 
   functionPayable(): boolean {
     return this.func && this.func.payable
+  }
+
+  functionIsConstant(): boolean {
+    return this.func && this.func.constant;
   }
 
   addFunctionParameter() {
@@ -240,20 +245,20 @@ export class SendTxComponent implements OnInit {
 
       this.txForm.get('byteCode').setValidators([Validators.required]);
       this.txForm.get('byteCode').updateValueAndValidity();
-      this.txForm.get('gasLimit').setValidators([Validators.required]);
-      this.txForm.get('gasLimit').updateValueAndValidity();
+      this.txForm.get('deployGasLimit').setValidators([Validators.required]);
+      this.txForm.get('deployGasLimit').updateValueAndValidity();
     }
     if (this.step === 'contract') {
       console.log("setting contract validators")
       this.unvalidateSend();
       this.unvalidateDeploy();
 
-      this.txForm.get('contractAddress').setValidators(null);
+      this.txForm.get('contractAddress').setValidators([Validators.required]);
       this.txForm.get('contractAddress').updateValueAndValidity();
-      this.txForm.get('contractABI').setValidators(null);
+      this.txForm.get('contractABI').setValidators([Validators.required]);
       this.txForm.get('contractABI').updateValueAndValidity();
-
-
+      this.txForm.get('contractGasLimit').setValidators([Validators.required]);
+      this.txForm.get('contractGasLimit').updateValueAndValidity();
     }
   }
 
@@ -267,15 +272,17 @@ export class SendTxComponent implements OnInit {
   unvalidateDeploy(): void {
     this.txForm.get('byteCode').setValidators(null);
     this.txForm.get('byteCode').updateValueAndValidity();
-    this.txForm.get('gasLimit').setValidators(null);
-    this.txForm.get('gasLimit').updateValueAndValidity();
+    this.txForm.get('deployGasLimit').setValidators(null);
+    this.txForm.get('deployGasLimit').updateValueAndValidity();
   }
 
   unvalidateContract(): void {
-    this.txForm.get('byteCode').setValidators(null);
-    this.txForm.get('byteCode').updateValueAndValidity();
-    this.txForm.get('gasLimit').setValidators(null);
-    this.txForm.get('gasLimit').updateValueAndValidity();
+    this.txForm.get('contractAddress').setValidators(null);
+    this.txForm.get('contractAddress').updateValueAndValidity();
+    this.txForm.get('contractABI').setValidators(null);
+    this.txForm.get('contractABI').updateValueAndValidity();
+    this.txForm.get('contractGasLimit').setValidators(null);
+    this.txForm.get('contractGasLimit').updateValueAndValidity();
   }
 
   validate(): boolean {
@@ -330,14 +337,17 @@ export class SendTxComponent implements OnInit {
     let pk = this.txForm.get('privateKey').value;
     this.sending = true;
     let tx = {};
-    let gasLimit = this.txForm.get('gasLimit').value;
     if (this.step === 'deploy') {
+      // DEPLOY ===============================================
+      let gasLimit = this.txForm.get('deployGasLimit').value;
       let byteCode = this.txForm.get('byteCode').value;
       if (!byteCode.startsWith("0x")) {
         byteCode = '0x' + byteCode;
       }
       tx = { data: byteCode, gas: gasLimit }
     } else if (this.step === 'contract') {
+      // USE CONTRACT ==========================================
+      let gasLimit = this.txForm.get('contractGasLimit').value;
       let params: string[] = [];
       if (this.func.inputs.length > 0) {
         for (var control of this.functionParameters.controls) {
@@ -392,7 +402,8 @@ export class SendTxComponent implements OnInit {
         this.sending = false;
         return;
       }
-      tx = { to: to, value: amount, gas: gasLimit }
+      // should probably use this since we don't ask the user here: https://web3js.readthedocs.io/en/1.0/web3-eth.html#estimategas
+      tx = { to: to, value: amount, gas: '100000' }
     }
     console.log("TX:", tx);
     this.sendAndWait(pk, tx)
